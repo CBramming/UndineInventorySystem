@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "789672636555",
+    "project_id": "undineinventorysystem-957b8",
+    "storage_bucket": "undineinventorysystem-957b8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:789672636555:android:51808b2deaea26817f248e",
+        "android_client_info": {
+          "package_name": "com.example.undineinventorysystem"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-7s4kc0Kr0lC8yNkNhyHeusrlTUm_FcM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
