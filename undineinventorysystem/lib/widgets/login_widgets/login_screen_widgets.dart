@@ -23,7 +23,7 @@ class UsernameInputField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       decoration: const InputDecoration(
-        labelText: 'Email',
+        labelText: 'Email Test',
         suffixIcon: Icon(Icons.person_outline),
       ),
     );
