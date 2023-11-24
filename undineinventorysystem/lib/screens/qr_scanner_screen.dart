@@ -12,7 +12,7 @@ class QRScannerScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.push(context,
+            Navigator.pop(context,
                 MaterialPageRoute(builder: (context) => LoginScreen()));
           },
         ),

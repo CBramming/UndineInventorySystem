@@ -7,9 +7,23 @@ class SignUpPush extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onSignUpPush,
-      child: const Text('Signup'),
+    return SizedBox(
+      width: 150,
+      height: 50,
+      child: ElevatedButton(
+        onPressed: onSignUpPush,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color.fromARGB(255, 68, 98, 122),
+          padding: const EdgeInsets.symmetric(vertical: 5.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        ),
+        child: const Text(
+          'Signup',
+          style: TextStyle(fontSize: 18),
+        ),
+      ),
     );
   }
 }
@@ -80,12 +94,11 @@ class ConfirmationPasswordInputField extends StatelessWidget {
   }
 }
 
-class AlreadyHaveAnAccount extends StatelessWidget{
-
+class AlreadyHaveAnAccount extends StatelessWidget {
   const AlreadyHaveAnAccount({super.key});
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return const Text(
       'Already have an account?',
       textAlign: TextAlign.center,
@@ -94,13 +107,13 @@ class AlreadyHaveAnAccount extends StatelessWidget{
   }
 }
 
-class BackToLogin extends StatelessWidget{
+class BackToLogin extends StatelessWidget {
   final VoidCallback onBackToLogin;
 
   const BackToLogin({super.key, required this.onBackToLogin});
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return TextButton(
       onPressed: onBackToLogin,
       child: const Text('Login'),

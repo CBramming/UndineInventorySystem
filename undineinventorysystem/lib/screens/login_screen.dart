@@ -6,7 +6,7 @@ import '../widgets/login_widgets/login_screen_widgets.dart';
 import '../services/auth_service.dart';
 
 class LoginScreen extends StatelessWidget {
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
   LoginScreen({super.key});
@@ -25,16 +25,18 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 200),
               const LoginTitle(),
               const SizedBox(height: 48.0),
-              UsernameInputField(controller: usernameController),
+              UsernameInputField(controller: emailController),
               const SizedBox(height: 16.0),
               PasswordInputField(controller: passwordController),
-              const SizedBox(height: 80.0),
+              const SizedBox(height: 50.0),
               LoginButton(
                 onLogin: () => signIn(context),
               ),
+              const SizedBox(height: 150.0),
               SignUpPrompt(
                 onSignUpPrompt: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SignUp()));
                 },
               ),
             ],
@@ -45,7 +47,7 @@ class LoginScreen extends StatelessWidget {
   }
 
   void signIn(BuildContext context) async {
-    String email = usernameController.text.trim();
+    String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
     print('Attempting to sign in with Email: $email'); // Debugging
@@ -62,7 +64,7 @@ class LoginScreen extends StatelessWidget {
       print('Firebase Auth Response User: $user'); // Debugging
 
       if (user != null) {
-        Navigator.of(context).pushReplacement(
+        Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => const QRScannerScreen()));
       } else {
         print('User is null after sign in attempt'); // Debugging
