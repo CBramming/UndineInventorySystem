@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:undineinventorysystem/screens/qr_scanner_screen.dart';
+import 'package:undineinventorysystem/screens/sign_up_screen.dart';
 import '../widgets/login_widgets/login_screen_widgets.dart';
 import '../services/auth_service.dart';
 
@@ -33,7 +34,7 @@ class LoginScreen extends StatelessWidget {
               ),
               SignUpPrompt(
                 onSignUpPrompt: () {
-                  // TODO: Navigate to sign-up screen logic
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
                 },
               ),
             ],
