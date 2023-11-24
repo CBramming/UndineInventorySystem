@@ -21,7 +21,7 @@ class LoginScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+              const SizedBox(height: 200),
               const LoginTitle(),
               const SizedBox(height: 48.0),
               UsernameInputField(controller: usernameController),
