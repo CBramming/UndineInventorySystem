@@ -8,16 +8,18 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Undine Inventory',
       theme: ThemeData(fontFamily: 'OpenSans'),
-      home: LoginScreen(), // Set LoginScreen as the home screen
+      home: LoginScreen(),
     );
   }
 }
