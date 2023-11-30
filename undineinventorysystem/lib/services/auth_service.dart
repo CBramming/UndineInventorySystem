@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -35,6 +36,21 @@ try {
   print(e);
 }
   }
+
+static Future<void> addItemToDB(String nameId, int amount) async {
+  try {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    CollectionReference items = firestore.collection('Items');
+
+    await items.add({
+      'something': nameId,
+      'amount2': amount,
+    });
+  } catch (e) {
+    print('Error');
+  }
+}
 
   // TODO: Implement signOut
   // Sign out
