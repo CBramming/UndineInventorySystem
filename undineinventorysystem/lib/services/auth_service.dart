@@ -17,7 +17,6 @@ class AuthService {
     }
   }
 
-  // TODO: Implement register
   // Register with email and password using Firebase
   Future<User?> createUserWithEmailAndPassword(String email, String password) async {
 try {
@@ -47,6 +46,22 @@ static Future<void> addItemToDB(String nameId, int amount) async {
       'something': nameId,
       'amount2': amount,
     });
+  } catch (e) {
+    print('Error');
+  }
+}
+
+static Future<void> deleteItemToDB(String nameId, int amount) async {
+  try {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    CollectionReference items = firestore.collection('Items');
+
+    QuerySnapshot querySnapshot = await items.where('something', isEqualTo: nameId).get();
+
+    for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+      await doc.reference.delete();
+    }
   } catch (e) {
     print('Error');
   }

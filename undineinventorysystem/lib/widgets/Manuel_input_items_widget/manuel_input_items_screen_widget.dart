@@ -64,6 +64,29 @@ class SendInputItem extends StatelessWidget {
   }
 }
 
+class DeleteInputItem extends StatelessWidget {
+  final TextEditingController deleteitemscontroller;
+  final int counter;
+  final void Function(String, int) onPressed;
+
+  DeleteInputItem({
+    required this.deleteitemscontroller,
+    required this.counter,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        // Call the onPressed function with the input data
+        onPressed(deleteitemscontroller.text, counter);
+      },
+      child: Text('Delete Input Of An Item'),
+    );
+  }
+}
+
 
 
 

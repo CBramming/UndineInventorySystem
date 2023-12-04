@@ -4,6 +4,9 @@ import 'package:undineinventorysystem/screens/Manuel_input_items_screen.dart';
 import 'package:undineinventorysystem/screens/login_screen.dart';
 import 'package:undineinventorysystem/widgets/qr_scanner_screen_widget/qr_scanner_widget.dart';
 
+import 'package:undineinventorysystem/widgets/custom_widgets/tab_bar.dart';
+
+
 class QRScannerScreen extends StatelessWidget {
   const QRScannerScreen({Key? key}) : super(key: key);
 
@@ -20,14 +23,15 @@ class QRScannerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('QR Scanner'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-          },
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          actions: const <Widget>[
+            PersonDropdownMenu(),
+          ],
         ),
       ),
       body: Center(
@@ -53,6 +57,7 @@ class QRScannerScreen extends StatelessWidget {
             ),
           ],
         ),
+        bottomNavigationBar: const CustomTabBar(),
       ),
     );
   }
