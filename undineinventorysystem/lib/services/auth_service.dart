@@ -17,7 +17,6 @@ class AuthService {
     }
   }
 
-  // TODO: Implement register
   // Register with email and password using Firebase
   Future<User?> createUserWithEmailAndPassword(String email, String password) async {
 try {
