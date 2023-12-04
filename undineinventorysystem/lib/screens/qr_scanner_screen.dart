@@ -1,24 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:undineinventorysystem/screens/login_screen.dart';
+import 'package:undineinventorysystem/screens/sign_up_screen.dart';
+import 'package:undineinventorysystem/widgets/custom_widgets/person_dropdown_menu_widget.dart';
+import 'package:undineinventorysystem/widgets/custom_widgets/tab_bar.dart';
 
 class QRScannerScreen extends StatelessWidget {
   const QRScannerScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('QR Scanner'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context,
-                MaterialPageRoute(builder: (context) => LoginScreen()));
-          },
+    return DefaultTabController(
+      length: 3, // Number of tabs
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          actions: const <Widget>[
+            PersonDropdownMenu(),
+          ],
         ),
-      ),
-      body: const Center(
-        child: Text('QR Scanner Screen'),
+        body: TabBarView(
+          children: [
+            const Center(child: Text('QR Scanner Content')),
+            SignUp(),
+            const Center(child: Text('Catalog Content')),
+          ],
+        ),
+        bottomNavigationBar: const CustomTabBar(),
       ),
     );
   }
