@@ -4,7 +4,7 @@ import '../services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ManuelInputCounter extends StatefulWidget {
-  const ManuelInputCounter({super.key});
+  const ManuelInputCounter({Key? key}) : super(key: key);
 
   @override
   ManuelInputItems createState() => ManuelInputItems();
@@ -24,9 +24,9 @@ class ManuelInputItems extends State<ManuelInputCounter> {
 
   void decrementCounter() {
     setState(() {
-      if(counter > 0){
+      if (counter > 0) {
         counter--;
-      }      
+      }
     });
   }
 
@@ -57,12 +57,25 @@ class ManuelInputItems extends State<ManuelInputCounter> {
                 ],
               ),
               const SizedBox(height: 50),
-             SendInputItem(
-              inputitemscontroller: inputitemscontroller,
-              counter: counter,
-              onPressed: (String name, int count) {
-                AuthService.addItemToDB(inputitemscontroller.text, counter);
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SendInputItem(
+                    inputitemscontroller: inputitemscontroller,
+                    counter: counter,
+                    onPressed: (String name, int count) {
+                      AuthService.addItemToDB(inputitemscontroller.text, counter);
+                    },
+                  ),
+                  const SizedBox(width: 20.0),
+                  DeleteInputItem(
+                    deleteitemscontroller: inputitemscontroller,
+                    counter: counter,
+                    onPressed: (String name, int count) {
+                      AuthService.deleteItemToDB(inputitemscontroller.text, counter);
+                    },
+                  ),
+                ],
               ),
             ],
           ),
