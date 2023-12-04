@@ -26,7 +26,7 @@ class CustomTabBar extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.output_outlined, size: 24),
+                Icon(Icons.note_alt_outlined, size: 24),
                 Text(
                   'Manual',
                   style: TextStyle(fontSize: 12),
