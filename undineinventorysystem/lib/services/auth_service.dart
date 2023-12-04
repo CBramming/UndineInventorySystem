@@ -51,6 +51,22 @@ static Future<void> addItemToDB(String nameId, int amount) async {
   }
 }
 
+static Future<void> deleteItemToDB(String nameId, int amount) async {
+  try {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    CollectionReference items = firestore.collection('Items');
+
+    QuerySnapshot querySnapshot = await items.where('something', isEqualTo: nameId).get();
+
+    for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+      await doc.reference.delete();
+    }
+  } catch (e) {
+    print('Error');
+  }
+}
+
   // TODO: Implement signOut
   // Sign out
   Future<void> signOut() async {
