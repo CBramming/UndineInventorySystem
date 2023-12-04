@@ -4,12 +4,12 @@ import 'package:undineinventorysystem/widgets/custom_widgets/person_dropdown_men
 import 'package:undineinventorysystem/widgets/custom_widgets/tab_bar.dart';
 
 class QRScannerScreen extends StatelessWidget {
-  const QRScannerScreen({super.key});
+  const QRScannerScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3, // Number of tabs
+      length: 3, 
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
