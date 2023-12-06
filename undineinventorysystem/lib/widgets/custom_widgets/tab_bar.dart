@@ -14,10 +14,10 @@ class CustomTabBar extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.qr_code_outlined, size: 24),
+                Icon(Icons.qr_code_outlined, size: 24, color: Colors.white,),
                 Text(
                   'QR-Scanner',
-                  style: TextStyle(fontSize: 12),
+                  style: TextStyle(fontSize: 12, color: Colors.white),
                 ),
               ],
             ),
@@ -26,10 +26,10 @@ class CustomTabBar extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.note_alt_outlined, size: 24),
+                Icon(Icons.note_alt_outlined, size: 24, color: Colors.white),
                 Text(
                   'Manual',
-                  style: TextStyle(fontSize: 12),
+                  style: TextStyle(fontSize: 12, color: Colors.white),
                 ),
               ],
             ),
@@ -38,11 +38,12 @@ class CustomTabBar extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.grid_on_outlined, size: 24),
+                Icon(Icons.grid_on_outlined, size: 24, color: Colors.white),
                 Text(
                   'Catalog',
                   style: TextStyle(
                     fontSize: 12,
+                    color: Colors.white,
                   ),
                 ),
               ],

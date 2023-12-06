@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:undineinventorysystem/widgets/Manuel_input_items_widget/manuel_input_items_screen_widget.dart';
-import '../services/auth_service.dart';
+import 'package:undineinventorysystem/widgets/detailed_view_widget/detailed_view_screen_widget.dart';
+import '../services/item_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ManuelInputCounter extends StatefulWidget {
-  const ManuelInputCounter({Key? key}) : super(key: key);
+class DetailedItemCounter extends StatefulWidget {
+  const DetailedItemCounter({Key? key}) : super(key: key);
 
   @override
-  ManuelInputItems createState() => ManuelInputItems();
+  DetailedItemView createState() => DetailedItemView();
 }
 
-class ManuelInputItems extends State<ManuelInputCounter> {
+class DetailedItemView extends State<DetailedItemCounter> {
   final inputitemscontroller = TextEditingController();
-  AuthService authService = AuthService();
+  ItemService itemService = ItemService();
 
   int counter = 0;
 
@@ -33,6 +33,12 @@ class ManuelInputItems extends State<ManuelInputCounter> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+         appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          actions: const <Widget>[
+          ],
+        ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
@@ -41,9 +47,10 @@ class ManuelInputItems extends State<ManuelInputCounter> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              const SizedBox(height: 300.0),
-              InputItem(inputitemscontroller: inputitemscontroller),
-              const SizedBox(height: 10.0),
+              const DetailedViewTitel(),
+              const SizedBox(height: 65.0),
+              const DetailedViewImage(),
+              const SizedBox(height: 60.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -64,15 +71,15 @@ class ManuelInputItems extends State<ManuelInputCounter> {
                     inputitemscontroller: inputitemscontroller,
                     counter: counter,
                     onPressed: (String name, int count) {
-                      AuthService.addItemToDB(inputitemscontroller.text, counter);
+                      itemService.addItemToDB(inputitemscontroller.text, counter);
                     },
                   ),
-                  const SizedBox(width: 20.0),
+                  const SizedBox(width: 10),
                   DeleteInputItem(
                     deleteitemscontroller: inputitemscontroller,
                     counter: counter,
                     onPressed: (String name, int count) {
-                      AuthService.deleteItemToDB(inputitemscontroller.text, counter);
+                      itemService.deleteItemToDB(inputitemscontroller.text, counter);
                     },
                   ),
                 ],

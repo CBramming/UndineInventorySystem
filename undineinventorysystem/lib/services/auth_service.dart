@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -18,54 +17,26 @@ class AuthService {
   }
 
   // Register with email and password using Firebase
-  Future<User?> createUserWithEmailAndPassword(String email, String password) async {
-try {
-  final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-    email: email,
-    password: password,
-  );
-  return credential.user;
-} on FirebaseAuthException catch (e) {
-  if (e.code == 'weak-password') {
-    print('The password provided is too weak.');
-  } else if (e.code == 'email-already-in-use') {
-    print('The account already exists for that email.');
-  }
-} catch (e) {
-  print(e);
-}
-  }
-
-static Future<void> addItemToDB(String nameId, int amount) async {
-  try {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    CollectionReference items = firestore.collection('Items');
-
-    await items.add({
-      'something': nameId,
-      'amount2': amount,
-    });
-  } catch (e) {
-    print('Error');
-  }
-}
-
-static Future<void> deleteItemToDB(String nameId, int amount) async {
-  try {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    CollectionReference items = firestore.collection('Items');
-
-    QuerySnapshot querySnapshot = await items.where('something', isEqualTo: nameId).get();
-
-    for (QueryDocumentSnapshot doc in querySnapshot.docs) {
-      await doc.reference.delete();
+  Future<User?> createUserWithEmailAndPassword(
+      String email, String password) async {
+    try {
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return credential.user;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
     }
-  } catch (e) {
-    print('Error');
+    return null;
   }
-}
 
   // TODO: Implement signOut
   // Sign out
