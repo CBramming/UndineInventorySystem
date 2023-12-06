@@ -1,5 +1,18 @@
 import 'package:flutter/material.dart';
 
+class DetailedViewTitel extends StatelessWidget{
+  const DetailedViewTitel({super.key});
+
+  @override
+  Widget build(BuildContext context){
+    return const Text(
+      'Detailed View',
+      textAlign: TextAlign.center,
+      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+    );
+  }
+}
+
 class InputItem extends StatelessWidget {
   final TextEditingController inputitemscontroller;
 
@@ -20,9 +33,16 @@ class DecrementButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+     return SizedBox(
+      height: 50,
+      width: 50,
+    child: ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color.fromARGB(255, 68, 98, 122)
+      ),
       onPressed: onPressed,
-      child: Text('Decrement'),
+      child: const Text('-', style: TextStyle(color: Colors.white)),
+      ),
     );
   }
 }
@@ -34,9 +54,16 @@ class IncrementButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    return SizedBox(
+      height: 50,
+      width: 50,
+    child: ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color.fromARGB(255, 68, 98, 122)
+      ),
       onPressed: onPressed,
-      child: Text('Increment'),
+      child: const Text('+', style: TextStyle(color: Colors.white)),
+      ),
     );
   }
 }
@@ -54,12 +81,17 @@ class SendInputItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    return SizedBox(
+      width: 130,
+      height: 50,
+      child: ElevatedButton(
+      style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 10, 240, 40)),
       onPressed: () {
         // Call the onPressed function with the input data
         onPressed(inputitemscontroller.text, counter);
       },
-      child: Text('Send Input Of Item'),
+      child: const Text('Put', style: TextStyle(color: Colors.white)),
+      ),
     );
   }
 }
@@ -77,12 +109,30 @@ class DeleteInputItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    return SizedBox(
+      width: 130,
+      height: 50,
+      child: ElevatedButton(
+      style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 240, 10, 10)),
       onPressed: () {
         // Call the onPressed function with the input data
         onPressed(deleteitemscontroller.text, counter);
       },
-      child: Text('Delete Input Of An Item'),
+      child: const Text('Take', style: TextStyle(color: Colors.white)),
+      ),
+     );
+  }
+}
+
+class DetailedViewImage extends StatelessWidget {
+  const DetailedViewImage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox(
+      width: 300,
+      height: 300,
+      child: Image(image: AssetImage('assets/Images/hæksehyl.jpg')),
     );
   }
 }
