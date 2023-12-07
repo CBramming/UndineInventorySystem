@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class DetailedViewTitel extends StatelessWidget{
-  const DetailedViewTitel({super.key});
+class DetailedViewTitel extends StatelessWidget {
+  const DetailedViewTitel({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return const Text(
       'Detailed View',
       textAlign: TextAlign.center,
@@ -33,16 +33,19 @@ class DecrementButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     return SizedBox(
+    return SizedBox(
       height: 50,
       width: 50,
-    child: ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color.fromARGB(255, 68, 98, 122)
-      ),
-      onPressed: onPressed,
-      child: const Text('-', style: TextStyle(color: Colors.white)),
-      ),
+      child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: const Color.fromARGB(255, 68, 98, 122),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(200))),
+          onPressed: onPressed, 
+            child: const Text('-',
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center),
+          ),
     );
   }
 }
@@ -57,13 +60,16 @@ class IncrementButton extends StatelessWidget {
     return SizedBox(
       height: 50,
       width: 50,
-    child: ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color.fromARGB(255, 68, 98, 122)
-      ),
-      onPressed: onPressed,
-      child: const Text('+', style: TextStyle(color: Colors.white)),
-      ),
+      child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: const Color.fromARGB(255, 68, 98, 122),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(200))),
+          onPressed: onPressed,
+            child: const Text('+',
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center),
+          ),
     );
   }
 }
@@ -85,12 +91,13 @@ class SendInputItem extends StatelessWidget {
       width: 130,
       height: 50,
       child: ElevatedButton(
-      style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 10, 240, 40)),
-      onPressed: () {
-        // Call the onPressed function with the input data
-        onPressed(inputitemscontroller.text, counter);
-      },
-      child: const Text('Put', style: TextStyle(color: Colors.white)),
+        style: ElevatedButton.styleFrom(
+            backgroundColor: const Color.fromARGB(255, 10, 240, 40)),
+        onPressed: () {
+          // Call the onPressed function with the input data
+          onPressed(inputitemscontroller.text, counter);
+        },
+        child: const Text('Put', style: TextStyle(color: Colors.white)),
       ),
     );
   }
@@ -113,14 +120,15 @@ class DeleteInputItem extends StatelessWidget {
       width: 130,
       height: 50,
       child: ElevatedButton(
-      style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 240, 10, 10)),
-      onPressed: () {
-        // Call the onPressed function with the input data
-        onPressed(deleteitemscontroller.text, counter);
-      },
-      child: const Text('Take', style: TextStyle(color: Colors.white)),
+        style: ElevatedButton.styleFrom(
+            backgroundColor: const Color.fromARGB(255, 240, 10, 10)),
+        onPressed: () {
+          // Call the onPressed function with the input data
+          onPressed(deleteitemscontroller.text, counter);
+        },
+        child: const Text('Take', style: TextStyle(color: Colors.white)),
       ),
-     );
+    );
   }
 }
 
@@ -137,7 +145,38 @@ class DetailedViewImage extends StatelessWidget {
   }
 }
 
+class DynamicTextStock extends StatelessWidget {
+  const DynamicTextStock({Key? key}) : super(key: key);
 
+  @override
+  Widget build(BuildContext context) {
+    return const Text(
+      'Name: ',
+      textAlign: TextAlign.center,
+    );
+  }
+}
 
+class DynamicTextAmount extends StatelessWidget {
+  const DynamicTextAmount({Key? key}) : super(key: key);
 
+  @override
+  Widget build(BuildContext context) {
+    return const Text(
+      'Amount: ',
+      textAlign: TextAlign.center,
+    );
+  }
+}
 
+class DynamicDescription extends StatelessWidget {
+  const DynamicDescription({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text(
+      'Description: ',
+      textAlign: TextAlign.center,
+    );
+  }
+}
