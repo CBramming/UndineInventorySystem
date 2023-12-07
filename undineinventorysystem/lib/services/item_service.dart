@@ -48,4 +48,14 @@ class ItemService {
       return false;
     }
   }
+
+  Future<List<DocumentSnapshot>> getAllItems() async {
+    try {
+      QuerySnapshot querySnapshot = await firestore.collection('Items').get();
+      return querySnapshot.docs;
+    } catch (e) {
+      print('Error fetching items: $e');
+      return [];
+    }
+  }
 }
