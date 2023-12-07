@@ -48,4 +48,52 @@ class ItemService {
       return false;
     }
   }
+
+Future<String> getNameFromFirebase(String nameId) async {
+    try {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('Items')
+          .doc(nameId)
+          .get();
+
+      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+
+      return data?['Name'] ?? 'Default Text';
+    } catch (e) {
+      print('Error getting data from Firebase: $e');
+      return 'Error';
+    }
+  }
+
+  Future<String> getAmountFromFirebase(String nameId) async {
+    try {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('Items')
+          .doc(nameId)
+          .get();
+
+      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+
+      return data?['Amount'] ?? 'Default Text';
+    } catch (e) {
+      print('Error getting data from Firebase: $e');
+      return 'Error';
+    }
+  }
+
+  Future<String> getDescriptionFromFirebase(String nameId) async {
+    try {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('Items')
+          .doc(nameId)
+          .get();
+
+      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+
+      return data?['Description'] ?? 'Default Text';
+    } catch (e) {
+      print('Error getting data from Firebase: $e');
+      return 'Error';
+    }
+  }
 }

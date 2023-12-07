@@ -50,7 +50,14 @@ class DetailedItemView extends State<DetailedItemCounter> {
               const DetailedViewTitel(),
               const SizedBox(height: 65.0),
               const DetailedViewImage(),
-              const SizedBox(height: 60.0),
+              const SizedBox(height: 30.0),
+              const DynamicTextStock(),
+              const SizedBox(height: 5.0),
+              const DynamicTextAmount(),
+              const SizedBox(height: 5.0),
+              const DynamicDescription(),
+              const SizedBox(height: 20.0),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -60,13 +67,15 @@ class DetailedItemView extends State<DetailedItemCounter> {
                     '$counter',
                   ),
                   const SizedBox(width: 20.0),
+                  
                   IncrementButton(incrementCounter),
                 ],
               ),
-              const SizedBox(height: 50),
+              const SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  
                   SendInputItem(
                     inputitemscontroller: inputitemscontroller,
                     counter: counter,
