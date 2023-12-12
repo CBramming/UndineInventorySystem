@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:undineinventorysystem/models/item.dart';
 import 'package:undineinventorysystem/screens/detailed_view_screen.dart';
 import 'package:undineinventorysystem/services/item_service.dart';
 import '../widgets/manuel_get_item_widget/manuel_get_item_screen_widgets.dart';
@@ -42,10 +43,11 @@ class ManuelGetItem extends StatelessWidget {
     String nameId = inputitemscontroller.text.trim();
 
     try {
-      bool itemExists = await ItemService().getItemFromDB(nameId);
-      if (nameId.isNotEmpty && itemExists) {
+      Item? item = (await ItemService().getItemFromDB(nameId)) as Item?;
+      if (nameId.isNotEmpty && item != null) {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const DetailedItemCounter()));
+          builder: (context) => DetailedItemCounter(item: item),
+        ));
       } else {
         print('Item Not Found');
       }
