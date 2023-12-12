@@ -41,7 +41,6 @@ class ManuelGetItem extends StatelessWidget {
 
   void getItem(BuildContext context) async {
     String nameId = inputitemscontroller.text.trim();
-
     try {
       Item? item = (await ItemService().getItemFromDB(nameId)) as Item?;
       if (nameId.isNotEmpty && item != null) {

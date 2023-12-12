@@ -7,8 +7,9 @@ import 'dart:async';
 
 class DetailedItemCounter extends StatefulWidget {
   final Item item;
+  const DetailedItemCounter({Key? key, required this.item}) : super(key: key);
 
-  DetailedItemCounter({Key? key, required this.item}) : super(key: key);
+
 
   @override
   _DetailedItemCounterState createState() => _DetailedItemCounterState();

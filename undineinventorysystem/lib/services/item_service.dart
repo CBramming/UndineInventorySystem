@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:undineinventorysystem/models/item.dart';
 import 'dart:async';
 
+
 class ItemService {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -98,6 +99,7 @@ Future<void> updateItemAddAmountInDB(String nameId, int amountToAdd) async {
     }
   }
 
+
   Future<Item?> getItemFromDB(String itemName) async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -113,16 +115,21 @@ Future<void> updateItemAddAmountInDB(String nameId, int amountToAdd) async {
         // Return null if no matching document is found
         return null;
       }
+      return null;
     } catch (e) {
       print('Error fetching item: $e');
-      return null; // Handle the error gracefully by returning null
+      return null;
     }
   }
 
+
   Future<List<DocumentSnapshot>> getAllItems() async {
     try {
-      QuerySnapshot querySnapshot = await firestore.collection('Items').get();
-      return querySnapshot.docs;
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('Items').get();
+      return querySnapshot.docs
+          .map((doc) => Item.fromFirestore(doc.data() as Map<String, dynamic>))
+          .toList();
     } catch (e) {
       print('Error fetching items: $e');
       return [];
