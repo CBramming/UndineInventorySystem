@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:undineinventorysystem/models/item.dart';
 import 'dart:async';
 
-
 class ItemService {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 // Define the stream controller here
-  StreamController<void> _updateStreamController = StreamController<void>.broadcast();
+  StreamController<void> _updateStreamController =
+      StreamController<void>.broadcast();
 
   // Getter for the stream
   Stream<void> get updateStream => _updateStreamController.stream;
@@ -25,20 +25,57 @@ class ItemService {
     }
   }
 
-Future<void> updateItemReduceAmountInDB(String nameId, int amountToReduce) async {
-  try {
-    CollectionReference items = FirebaseFirestore.instance.collection('Items');
+  Future<void> updateItemReduceAmountInDB(
+      String nameId, int amountToReduce) async {
+    try {
+      CollectionReference items =
+          FirebaseFirestore.instance.collection('Items');
 
-    QuerySnapshot querySnapshot = await items.where('Name', isEqualTo: nameId).get();
+      QuerySnapshot querySnapshot =
+          await items.where('Name', isEqualTo: nameId).get();
 
-    for (QueryDocumentSnapshot doc in querySnapshot.docs) {
-      // Get the current item from the document
-      Item currentItem = Item.fromFirestore(doc.data() as Map<String, dynamic>);
+      for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+        // Get the current item from the document
+        Item currentItem =
+            Item.fromFirestore(doc.data() as Map<String, dynamic>);
 
-      // Calculate the new amount after reducing
-      int newAmount = currentItem.amount - amountToReduce;
+        // Calculate the new amount after reducing
+        int newAmount = currentItem.amount - amountToReduce;
 
-      if (newAmount >= 0) {
+        if (newAmount >= 0) {
+          // Update the document with individual fields
+          await doc.reference.update({
+            'Amount': newAmount,
+          });
+
+          // Notify the stream controller that the item has been updated
+          _updateStreamController.add(null);
+        } else {
+          // If the new amount is negative, you may choose to delete the document
+          await doc.reference.delete();
+        }
+      }
+    } catch (e) {
+      print('Error updating item amount: $e');
+    }
+  }
+
+  Future<void> updateItemAddAmountInDB(String nameId, int amountToAdd) async {
+    try {
+      CollectionReference items =
+          FirebaseFirestore.instance.collection('Items');
+
+      QuerySnapshot querySnapshot =
+          await items.where('Name', isEqualTo: nameId).get();
+
+      for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+        // Get the current item from the document
+        Item currentItem =
+            Item.fromFirestore(doc.data() as Map<String, dynamic>);
+
+        // Calculate the new amount after adding
+        int newAmount = currentItem.amount + amountToAdd;
+
         // Update the document with individual fields
         await doc.reference.update({
           'Amount': newAmount,
@@ -46,43 +83,11 @@ Future<void> updateItemReduceAmountInDB(String nameId, int amountToReduce) async
 
         // Notify the stream controller that the item has been updated
         _updateStreamController.add(null);
-      } else {
-        // If the new amount is negative, you may choose to delete the document
-        await doc.reference.delete();
       }
+    } catch (e) {
+      print('Error updating item amount: $e');
     }
-  } catch (e) {
-    print('Error updating item amount: $e');
   }
-}
-
-Future<void> updateItemAddAmountInDB(String nameId, int amountToAdd) async {
-  try {
-    CollectionReference items = FirebaseFirestore.instance.collection('Items');
-
-    QuerySnapshot querySnapshot = await items.where('Name', isEqualTo: nameId).get();
-
-    for (QueryDocumentSnapshot doc in querySnapshot.docs) {
-      // Get the current item from the document
-      Item currentItem = Item.fromFirestore(doc.data() as Map<String, dynamic>);
-
-      // Calculate the new amount after adding
-      int newAmount = currentItem.amount + amountToAdd;
-
-      // Update the document with individual fields
-      await doc.reference.update({
-        'Amount': newAmount,
-      });
-
-      // Notify the stream controller that the item has been updated
-      _updateStreamController.add(null);
-    }
-  } catch (e) {
-    print('Error updating item amount: $e');
-  }
-}
-
-
 
   Future<void> deleteItemToDB(String nameId, int amount) async {
     try {
@@ -98,7 +103,6 @@ Future<void> updateItemAddAmountInDB(String nameId, int amountToAdd) async {
       print('Error');
     }
   }
-
 
   Future<Item?> getItemFromDB(String itemName) async {
     try {
@@ -122,8 +126,7 @@ Future<void> updateItemAddAmountInDB(String nameId, int amountToAdd) async {
     }
   }
 
-
-  Future<List<DocumentSnapshot>> getAllItems() async {
+  Future<List<Item>> getAllItems() async {
     try {
       QuerySnapshot querySnapshot =
           await FirebaseFirestore.instance.collection('Items').get();
@@ -132,6 +135,7 @@ Future<void> updateItemAddAmountInDB(String nameId, int amountToAdd) async {
           .toList();
     } catch (e) {
       print('Error fetching items: $e');
+      // Consider a different error handling strategy here
       return [];
     }
   }
