@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:undineinventorysystem/models/item.dart';
 import 'package:undineinventorysystem/widgets/detailed_view_widget/detailed_view_screen_widget.dart';
 import '../services/item_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DetailedItemCounter extends StatefulWidget {
-  const DetailedItemCounter({Key? key}) : super(key: key);
+  final Item item;
+  const DetailedItemCounter({Key? key, required this.item}) : super(key: key);
 
   @override
   DetailedItemView createState() => DetailedItemView();
@@ -33,12 +35,11 @@ class DetailedItemView extends State<DetailedItemCounter> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-         appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          actions: const <Widget>[
-          ],
-        ),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        actions: const <Widget>[],
+      ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
@@ -57,7 +58,6 @@ class DetailedItemView extends State<DetailedItemCounter> {
               const SizedBox(height: 5.0),
               const DynamicDescription(),
               const SizedBox(height: 20.0),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -67,7 +67,6 @@ class DetailedItemView extends State<DetailedItemCounter> {
                     '$counter',
                   ),
                   const SizedBox(width: 20.0),
-                  
                   IncrementButton(incrementCounter),
                 ],
               ),
@@ -75,12 +74,12 @@ class DetailedItemView extends State<DetailedItemCounter> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  
                   SendInputItem(
                     inputitemscontroller: inputitemscontroller,
                     counter: counter,
                     onPressed: (String name, int count) {
-                      itemService.addItemToDB(inputitemscontroller.text, counter);
+                      itemService.addItemToDB(
+                          inputitemscontroller.text, counter);
                     },
                   ),
                   const SizedBox(width: 10),
@@ -88,7 +87,8 @@ class DetailedItemView extends State<DetailedItemCounter> {
                     deleteitemscontroller: inputitemscontroller,
                     counter: counter,
                     onPressed: (String name, int count) {
-                      itemService.deleteItemToDB(inputitemscontroller.text, counter);
+                      itemService.deleteItemToDB(
+                          inputitemscontroller.text, counter);
                     },
                   ),
                 ],

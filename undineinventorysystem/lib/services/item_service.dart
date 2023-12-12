@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:undineinventorysystem/models/item.dart';
 
 class ItemService {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -31,7 +32,7 @@ class ItemService {
     }
   }
 
-  Future<bool> getItemFromDB(String nameId) async {
+  Future<Item?> getItemFromDB(String nameId) async {
     try {
       DocumentSnapshot itemSnapshot = await FirebaseFirestore.instance
           .collection('Items')
@@ -39,27 +40,30 @@ class ItemService {
           .get();
 
       if (itemSnapshot.exists) {
-        return true;
-      } else {
-        return false;
+        // Assuming the data structure in Firestore matches your Item model
+        return Item.fromFirestore(itemSnapshot.data() as Map<String, dynamic>);
       }
+      return null;
     } catch (e) {
       print('Error fetching item: $e');
-      return false;
+      return null;
     }
   }
 
-Future<List<DocumentSnapshot>> getAllItems() async {
+  Future<List<Item>> getAllItems() async {
     try {
-      QuerySnapshot querySnapshot = await firestore.collection('Items').get();
-      return querySnapshot.docs;
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('Items').get();
+      return querySnapshot.docs
+          .map((doc) => Item.fromFirestore(doc.data() as Map<String, dynamic>))
+          .toList();
     } catch (e) {
       print('Error fetching items: $e');
       return [];
     }
   }
-  
-Future<String> getNameFromFirebase(String nameId) async {
+
+  Future<String> getNameFromFirebase(String nameId) async {
     try {
       DocumentSnapshot snapshot = await FirebaseFirestore.instance
           .collection('Items')

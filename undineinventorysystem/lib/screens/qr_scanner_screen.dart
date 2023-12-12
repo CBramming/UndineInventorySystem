@@ -29,6 +29,12 @@ class QRScannerScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
           actions: const <Widget>[
             PersonDropdownMenu(),
           ],
