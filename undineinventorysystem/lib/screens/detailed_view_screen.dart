@@ -3,20 +3,31 @@ import 'package:undineinventorysystem/models/item.dart';
 import 'package:undineinventorysystem/widgets/detailed_view_widget/detailed_view_screen_widget.dart';
 import '../services/item_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
 
 class DetailedItemCounter extends StatefulWidget {
   final Item item;
   const DetailedItemCounter({Key? key, required this.item}) : super(key: key);
 
+
+
   @override
-  DetailedItemView createState() => DetailedItemView();
+  _DetailedItemCounterState createState() => _DetailedItemCounterState();
 }
 
-class DetailedItemView extends State<DetailedItemCounter> {
-  final inputitemscontroller = TextEditingController();
-  ItemService itemService = ItemService();
-
+class _DetailedItemCounterState extends State<DetailedItemCounter> {
+  final ItemService itemService = ItemService();
+  TextEditingController inputitemscontroller = TextEditingController();
   int counter = 0;
+
+  // Define the stream controller before using it
+  late StreamController<void> _updateStreamController;
+
+  @override
+  void initState() {
+    super.initState();
+    _updateStreamController = StreamController<void>.broadcast();
+  }
 
   void incrementCounter() {
     setState(() {
@@ -30,6 +41,18 @@ class DetailedItemView extends State<DetailedItemCounter> {
         counter--;
       }
     });
+  }
+
+  void resetCounter() {
+    setState(() {
+      counter = 0;
+    });
+  }
+
+  @override
+  void dispose() {
+    _updateStreamController.close();
+    super.dispose();
   }
 
   @override
@@ -52,22 +75,25 @@ class DetailedItemView extends State<DetailedItemCounter> {
               const SizedBox(height: 65.0),
               const DetailedViewImage(),
               const SizedBox(height: 30.0),
-              const DynamicTextStock(),
+              DynamicTextStock(item: widget.item),
               const SizedBox(height: 5.0),
-              const DynamicTextAmount(),
+              StreamBuilder<void>(
+                stream: _updateStreamController.stream,
+                builder: (context, snapshot) {
+                  return DynamicTextAmount(item: widget.item);
+                },
+              ),
               const SizedBox(height: 5.0),
-              const DynamicDescription(),
+              DynamicDescription(item: widget.item),
               const SizedBox(height: 20.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  DecrementButton(decrementCounter),
+                  DecrementButton(() => decrementCounter()),
                   const SizedBox(width: 20.0),
-                  Text(
-                    '$counter',
-                  ),
+                  Text('$counter'),
                   const SizedBox(width: 20.0),
-                  IncrementButton(incrementCounter),
+                  IncrementButton(() => incrementCounter()),
                 ],
               ),
               const SizedBox(height: 30),
@@ -77,18 +103,20 @@ class DetailedItemView extends State<DetailedItemCounter> {
                   SendInputItem(
                     inputitemscontroller: inputitemscontroller,
                     counter: counter,
-                    onPressed: (String name, int count) {
-                      itemService.addItemToDB(
-                          inputitemscontroller.text, counter);
+                    onPressed: (String name, int count) async {
+                      await itemService.updateItemAddAmountInDB(widget.item.name, counter);
+                      resetCounter();
+                      _updateStreamController.add(null);
                     },
                   ),
                   const SizedBox(width: 10),
                   DeleteInputItem(
                     deleteitemscontroller: inputitemscontroller,
                     counter: counter,
-                    onPressed: (String name, int count) {
-                      itemService.deleteItemToDB(
-                          inputitemscontroller.text, counter);
+                    onPressed: (String name, int count) async {
+                      await itemService.updateItemReduceAmountInDB(widget.item.name, counter);
+                      resetCounter();
+                      _updateStreamController.add(null);
                     },
                   ),
                 ],

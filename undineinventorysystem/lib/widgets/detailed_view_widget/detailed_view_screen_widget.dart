@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:undineinventorysystem/models/item.dart';
 
 class DetailedViewTitel extends StatelessWidget {
   const DetailedViewTitel({Key? key}) : super(key: key);
@@ -146,36 +147,39 @@ class DetailedViewImage extends StatelessWidget {
 }
 
 class DynamicTextStock extends StatelessWidget {
-  const DynamicTextStock({Key? key}) : super(key: key);
+  final Item item;
+
+  const DynamicTextStock({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      'Name: ',
+    return Text(
+      'Name: ${item.name}',
       textAlign: TextAlign.center,
     );
   }
 }
 
 class DynamicTextAmount extends StatelessWidget {
-  const DynamicTextAmount({Key? key}) : super(key: key);
-
+  final Item item;
+  const DynamicTextAmount({Key? key, required this.item}) : super(key: key);
+ 
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      'Amount: ',
+    return Text(
+      'Amount: ${item.amount}',
       textAlign: TextAlign.center,
     );
   }
 }
 
 class DynamicDescription extends StatelessWidget {
-  const DynamicDescription({Key? key}) : super(key: key);
-
+  const DynamicDescription({Key? key, required this.item}) : super(key: key);
+  final Item item;
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      'Description: ',
+    return Text(
+      'Description: ${item.description}',
       textAlign: TextAlign.center,
     );
   }

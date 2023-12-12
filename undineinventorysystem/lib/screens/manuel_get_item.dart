@@ -41,12 +41,12 @@ class ManuelGetItem extends StatelessWidget {
 
   void getItem(BuildContext context) async {
     String nameId = inputitemscontroller.text.trim();
-
     try {
-      Item? item = await ItemService().getItemFromDB(nameId);
+      Item? item = (await ItemService().getItemFromDB(nameId)) as Item?;
       if (nameId.isNotEmpty && item != null) {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => DetailedItemCounter(item: item)));
+          builder: (context) => DetailedItemCounter(item: item),
+        ));
       } else {
         print('Item Not Found');
       }
