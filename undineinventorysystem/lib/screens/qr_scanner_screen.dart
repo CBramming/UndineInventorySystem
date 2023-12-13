@@ -43,7 +43,7 @@ class QRScannerScreen extends StatelessWidget {
           children: [
             QRScannerWidget(onScanResult: handleScanResult),
             ManuelGetItem(),
-            const Catalog(),
+            const CatalogScreen(),
           ],
         ),
         bottomNavigationBar: const CustomTabBar(),

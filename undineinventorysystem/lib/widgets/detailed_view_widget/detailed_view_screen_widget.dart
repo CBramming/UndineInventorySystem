@@ -1,28 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:undineinventorysystem/models/item.dart';
 
-class DetailedViewTitel extends StatelessWidget {
-  const DetailedViewTitel({Key? key}) : super(key: key);
+class DetailedViewItemName extends StatelessWidget {
+  final Item item;
+
+  DetailedViewItemName({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      'Detailed View',
+    return Text(
+      item.name,
       textAlign: TextAlign.center,
-      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 24,
+        color: Colors.grey[800],
+      ),
     );
   }
 }
 
 class InputItem extends StatelessWidget {
-  final TextEditingController inputitemscontroller;
+  final TextEditingController inputItemsController;
 
-  const InputItem({super.key, required this.inputitemscontroller});
+  const InputItem({Key? key, required this.inputItemsController})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: inputitemscontroller,
+      controller: inputItemsController,
+      decoration: InputDecoration(
+        labelText: 'Update amount',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        isDense: true, // Added for better control on the field's height
+        contentPadding:
+            const EdgeInsets.all(8), // Inner padding for the text field
+      ),
     );
   }
 }
@@ -34,18 +50,11 @@ class DecrementButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      width: 50,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            backgroundColor: const Color.fromARGB(255, 68, 98, 122),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(200))),
-        onPressed: onPressed,
-        child: const Text('-',
-            style: TextStyle(color: Colors.white), textAlign: TextAlign.center),
-      ),
+    return FloatingActionButton(
+      onPressed: onPressed,
+      backgroundColor: Colors.red[400],
+      elevation: 2,
+      child: const Icon(Icons.remove, color: Colors.white),
     );
   }
 }
@@ -57,29 +66,22 @@ class IncrementButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      width: 50,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            backgroundColor: const Color.fromARGB(255, 68, 98, 122),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(200))),
-        onPressed: onPressed,
-        child: const Text('+',
-            style: TextStyle(color: Colors.white), textAlign: TextAlign.center),
-      ),
+    return FloatingActionButton(
+      onPressed: onPressed,
+      backgroundColor: Colors.green[400],
+      elevation: 2,
+      child: const Icon(Icons.add, color: Colors.white),
     );
   }
 }
 
 class SendInputItem extends StatelessWidget {
-  final TextEditingController inputitemscontroller;
+  final TextEditingController inputItemsController;
   final int counter;
   final void Function(String, int) onPressed;
 
   SendInputItem({
-    required this.inputitemscontroller,
+    required this.inputItemsController,
     required this.counter,
     required this.onPressed,
   });
@@ -91,24 +93,29 @@ class SendInputItem extends StatelessWidget {
       height: 50,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            backgroundColor: const Color.fromARGB(255, 10, 240, 40)),
-        onPressed: () {
-          // Call the onPressed function with the input data
-          onPressed(inputitemscontroller.text, counter);
-        },
-        child: const Text('Put', style: TextStyle(color: Colors.white)),
+          backgroundColor: Color.fromARGB(255, 10, 17, 40), // darkish blue
+          foregroundColor: Colors.white, // text color
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        onPressed: () => onPressed(inputItemsController.text, counter),
+        child: const Text(
+          'Put',
+          style: TextStyle(fontSize: 18),
+        ),
       ),
     );
   }
 }
 
 class DeleteInputItem extends StatelessWidget {
-  final TextEditingController deleteitemscontroller;
+  final TextEditingController deleteItemsController;
   final int counter;
   final void Function(String, int) onPressed;
 
   DeleteInputItem({
-    required this.deleteitemscontroller,
+    required this.deleteItemsController,
     required this.counter,
     required this.onPressed,
   });
@@ -120,12 +127,18 @@ class DeleteInputItem extends StatelessWidget {
       height: 50,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            backgroundColor: const Color.fromARGB(255, 240, 10, 10)),
-        onPressed: () {
-          // Call the onPressed function with the input data
-          onPressed(deleteitemscontroller.text, counter);
-        },
-        child: const Text('Take', style: TextStyle(color: Colors.white)),
+          backgroundColor: Colors.white, // button color
+          foregroundColor: const Color.fromARGB(255, 10, 17, 40), // text color
+          side: const BorderSide(
+              color: Color.fromARGB(255, 10, 17, 40), width: 2), // border color
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        onPressed: () => onPressed(deleteItemsController.text, counter),
+        child: const Text('Take',
+            style: TextStyle(
+                fontSize: 18, color: Color.fromARGB(255, 10, 17, 40))),
       ),
     );
   }
@@ -139,55 +152,54 @@ class DetailedViewImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: 300,
-        height: 300,
-        child: (item.imageUrl != 'No Image')
-            ? Image.network(
-                item.imageUrl,
-                fit: BoxFit.cover,
-              )
-            : Container(
-                color: Colors.grey,
-                child: const Icon(Icons.image, size: 50),
-              ));
+      width: double.infinity,
+      height: 300,
+      child: item.imageUrl != 'No Image'
+          ? Image.network(item.imageUrl, fit: BoxFit.contain)
+          : Container(
+              color: Colors.grey[200],
+              child: const Icon(Icons.image_not_supported, size: 50),
+            ),
+    );
   }
 }
 
-class DynamicTextStock extends StatelessWidget {
+class TextItemName extends StatelessWidget {
   final Item item;
 
-  const DynamicTextStock({Key? key, required this.item}) : super(key: key);
+  const TextItemName({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      'Name: ${item.name}',
+      item.name,
+      style: TextStyle(fontSize: 18, color: Colors.grey[600]),
+    );
+  }
+}
+
+class TextItemAmount extends StatelessWidget {
+  final Item item;
+  const TextItemAmount({Key? key, required this.item}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      'Stock: ${item.amount}',
       textAlign: TextAlign.center,
     );
   }
 }
 
-class DynamicTextAmount extends StatelessWidget {
-  final Item item;
-  const DynamicTextAmount({Key? key, required this.item}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      'Amount: ${item.amount}',
-      textAlign: TextAlign.center,
-    );
-  }
-}
-
-class DynamicDescription extends StatelessWidget {
-  const DynamicDescription({Key? key, required this.item}) : super(key: key);
+class TextItemDescription extends StatelessWidget {
+  const TextItemDescription({Key? key, required this.item}) : super(key: key);
   final Item item;
   @override
   Widget build(BuildContext context) {
     return Text(
-      'Description: ${item.description}',
-      textAlign: TextAlign.center,
+      item.description,
+      style: TextStyle(
+          fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey[800]),
     );
   }
 }

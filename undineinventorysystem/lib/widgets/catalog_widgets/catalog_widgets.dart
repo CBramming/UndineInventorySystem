@@ -4,7 +4,13 @@ import 'package:undineinventorysystem/screens/detailed_view_screen.dart';
 import 'package:undineinventorysystem/services/item_service.dart';
 
 class CardGrid extends StatelessWidget {
-  const CardGrid({super.key});
+  final String searchString;
+
+  const CardGrid({
+    super.key,
+    required this.searchString,
+    required List<Item> filteredItems,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +29,13 @@ class CardGrid extends StatelessWidget {
           return const Text('No items found');
         }
 
-        List<Item> items = snapshot.data!;
+        List<Item> items = searchString.isEmpty
+            ? snapshot.data!
+            : snapshot.data!.where((item) {
+                return item.name
+                    .toLowerCase()
+                    .contains(searchString.toLowerCase());
+              }).toList();
 
         return buildGridView(items, context);
       },
@@ -49,7 +61,10 @@ class CardGrid extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => DetailedItemCounter(item: item, onAmountChanged: (int ) {  },),
+              builder: (context) => DetailedItemCounter(
+                item: item,
+                onAmountChanged: (int) {},
+              ),
             ),
           );
         },
@@ -92,5 +107,53 @@ class CardGrid extends StatelessWidget {
             ],
           ),
         ));
+  }
+}
+
+class SearchBarWidget extends StatelessWidget {
+  final TextEditingController searchController;
+  final ValueChanged<String> onSearchChanged;
+
+  const SearchBarWidget({
+    super.key,
+    required this.searchController,
+    required this.onSearchChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(6.0),
+      child: TextField(
+        controller: searchController,
+        decoration: InputDecoration(
+          labelText: 'Search item',
+          labelStyle: TextStyle(
+            color: Colors.grey[600],
+          ),
+          fillColor: Colors.white,
+          filled: true,
+          prefixIcon: const Icon(Icons.search, color: Colors.grey),
+          suffixIcon: searchController.text.isNotEmpty
+              ? GestureDetector(
+                  onTap: () {
+                    searchController.clear();
+                    onSearchChanged('');
+                  },
+                  child: const Icon(Icons.clear, color: Colors.grey),
+                )
+              : null,
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey.shade300),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Theme.of(context).primaryColor),
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+        onChanged: onSearchChanged,
+      ),
+    );
   }
 }
