@@ -79,15 +79,13 @@ class _DetailedItemCounterState extends State<DetailedItemCounter> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              const DetailedViewTitel(),
+              DetailedViewItemName(item: widget.item),
               const SizedBox(height: 65.0),
               DetailedViewImage(item: widget.item),
               const SizedBox(height: 30.0),
-              DynamicTextStock(item: widget.item),
-              const SizedBox(height: 5.0),
-              _buildAmountDisplay(),
+              TextItemDescription(item: widget.item),
               const SizedBox(height: 20.0),
-              DynamicDescription(item: widget.item),
+              _buildAmountDisplay(),
               const SizedBox(height: 20.0),
               _buildCounterRow(),
               const SizedBox(height: 30),
@@ -116,24 +114,24 @@ class _DetailedItemCounterState extends State<DetailedItemCounter> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        SendInputItem(
-          inputitemscontroller: _inputItemsController,
-          counter: _counter,
-          onPressed: (String name, int count) async {
-            await _itemService.updateItemAddAmountInDB(
-                widget.item.name, _counter);
-            _updateAmount(_counter); // Update internal amount state
-            _resetCounter();
-          },
-        ),
-        const SizedBox(width: 10),
         DeleteInputItem(
-          deleteitemscontroller: _inputItemsController,
+          deleteItemsController: _inputItemsController,
           counter: _counter,
           onPressed: (String name, int count) async {
             await _itemService.updateItemReduceAmountInDB(
                 widget.item.name, _counter);
             _updateAmount(-_counter); // Update internal amount state
+            _resetCounter();
+          },
+        ),
+        const SizedBox(width: 10),
+        SendInputItem(
+          inputItemsController: _inputItemsController,
+          counter: _counter,
+          onPressed: (String name, int count) async {
+            await _itemService.updateItemAddAmountInDB(
+                widget.item.name, _counter);
+            _updateAmount(_counter); // Update internal amount state
             _resetCounter();
           },
         ),
