@@ -70,7 +70,6 @@ class LoginButton extends StatelessWidget {
         child: const Text(
           'Login',
           style: TextStyle(fontSize: 18, color: Colors.white),
-          
         ),
       ),
     );
@@ -87,6 +86,59 @@ class SignUpPrompt extends StatelessWidget {
     return TextButton(
       onPressed: onSignUpPrompt,
       child: const Text('Sign up here'),
+    );
+  }
+}
+
+class PasswordOrEmailWrongDialog extends StatelessWidget {
+  const PasswordOrEmailWrongDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Wrong Email or Password!', textAlign: TextAlign.center,),
+      content: const Text('Press Try Again!', textAlign: TextAlign.center),
+      actions: <Widget>[
+        Align(
+          alignment: Alignment.center,
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+            ),
+            child: const Text('Try Again'),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class PasswordOrEmailEmptyDialog extends StatelessWidget {
+  const PasswordOrEmailEmptyDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Email or Password Empty!', textAlign: TextAlign.center,),
+      content: const Text('Press Try Again!', textAlign: TextAlign.center),
+      actions: <Widget>[
+        Align(
+          alignment: Alignment.center,
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              // You can trigger FIAM event here if needed
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+            ),
+            child: const Text('Try Again'),
+          ),
+        ),
+      ],
     );
   }
 }
