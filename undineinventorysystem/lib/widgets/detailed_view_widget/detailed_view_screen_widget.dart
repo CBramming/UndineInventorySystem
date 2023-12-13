@@ -38,15 +38,14 @@ class DecrementButton extends StatelessWidget {
       height: 50,
       width: 50,
       child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(255, 68, 98, 122),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(200))),
-          onPressed: onPressed, 
-            child: const Text('-',
-                style: TextStyle(color: Colors.white),
-                textAlign: TextAlign.center),
-          ),
+        style: ElevatedButton.styleFrom(
+            backgroundColor: const Color.fromARGB(255, 68, 98, 122),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(200))),
+        onPressed: onPressed,
+        child: const Text('-',
+            style: TextStyle(color: Colors.white), textAlign: TextAlign.center),
+      ),
     );
   }
 }
@@ -62,15 +61,14 @@ class IncrementButton extends StatelessWidget {
       height: 50,
       width: 50,
       child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(255, 68, 98, 122),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(200))),
-          onPressed: onPressed,
-            child: const Text('+',
-                style: TextStyle(color: Colors.white),
-                textAlign: TextAlign.center),
-          ),
+        style: ElevatedButton.styleFrom(
+            backgroundColor: const Color.fromARGB(255, 68, 98, 122),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(200))),
+        onPressed: onPressed,
+        child: const Text('+',
+            style: TextStyle(color: Colors.white), textAlign: TextAlign.center),
+      ),
     );
   }
 }
@@ -163,7 +161,7 @@ class DynamicTextStock extends StatelessWidget {
 class DynamicTextAmount extends StatelessWidget {
   final Item item;
   const DynamicTextAmount({Key? key, required this.item}) : super(key: key);
- 
+
   @override
   Widget build(BuildContext context) {
     return Text(

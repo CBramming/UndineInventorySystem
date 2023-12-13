@@ -1,7 +1,7 @@
 class Item {
   final String name;
   final String description;
-  final int amount;
+  int amount;
   final String imageUrl;
 
   Item(

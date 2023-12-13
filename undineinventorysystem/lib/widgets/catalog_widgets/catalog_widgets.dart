@@ -49,7 +49,7 @@ class CardGrid extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => DetailedItemCounter(item: item),
+              builder: (context) => DetailedItemCounter(item: item, onAmountChanged: (int ) {  },),
             ),
           );
         },
