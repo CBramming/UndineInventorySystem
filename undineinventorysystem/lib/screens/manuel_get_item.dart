@@ -45,7 +45,7 @@ class ManuelGetItem extends StatelessWidget {
       Item? item = (await ItemService().getItemFromDB(nameId)) as Item?;
       if (nameId.isNotEmpty && item != null) {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => DetailedItemCounter(item: item),
+          builder: (context) => DetailedItemCounter(item: item, onAmountChanged: (int ) {  },),
         ));
       } else {
         print('Item Not Found');
