@@ -54,21 +54,37 @@ class LoginScreen extends StatelessWidget {
 
     if (email.isEmpty || password.isEmpty) {
       print('Email or password is empty'); // Debugging
+       showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const PasswordOrEmailEmptyDialog();
+          },
+        );
       // TODO: Handle empty fields, show an error message, etc.
       return;
     }
 
     try {
-      User? user =
-          await AuthService().signInWithEmailAndPassword(email, password);
+      User? user = await AuthService().signInWithEmailAndPassword(email, password);
       print('Firebase Auth Response User: $user'); // Debugging
 
       if (user != null) {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const QRScannerScreen()));
-      } else {
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const QRScannerScreen()));
+      }
+      else {
         print('User is null after sign in attempt'); // Debugging
         // TODO: Handle null user (not signed in), show an error message
+        // Display the PasswordOrEmailWrongDialog when login fails
+        // ignore: use_build_context_synchronously
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const PasswordOrEmailWrongDialog();
+          },
+        );
+        emailController.clear();
+        passwordController.clear();
       }
     } catch (e) {
       print('Sign in error: $e'); // Debugging
