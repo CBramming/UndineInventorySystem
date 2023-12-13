@@ -81,7 +81,7 @@ class _DetailedItemCounterState extends State<DetailedItemCounter> {
             children: <Widget>[
               const DetailedViewTitel(),
               const SizedBox(height: 65.0),
-              const DetailedViewImage(),
+              DetailedViewImage(item: widget.item),
               const SizedBox(height: 30.0),
               DynamicTextStock(item: widget.item),
               const SizedBox(height: 5.0),

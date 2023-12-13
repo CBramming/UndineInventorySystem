@@ -119,7 +119,6 @@ class ItemService {
         // Return null if no matching document is found
         return null;
       }
-      return null;
     } catch (e) {
       print('Error fetching item: $e');
       return null;

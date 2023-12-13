@@ -132,15 +132,24 @@ class DeleteInputItem extends StatelessWidget {
 }
 
 class DetailedViewImage extends StatelessWidget {
-  const DetailedViewImage({Key? key}) : super(key: key);
+  final Item item;
+
+  const DetailedViewImage({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(
-      width: 300,
-      height: 300,
-      child: Image(image: AssetImage('assets/Images/hæksehyl.jpg')),
-    );
+    return SizedBox(
+        width: 300,
+        height: 300,
+        child: (item.imageUrl != 'No Image')
+            ? Image.network(
+                item.imageUrl,
+                fit: BoxFit.cover,
+              )
+            : Container(
+                color: Colors.grey,
+                child: const Icon(Icons.image, size: 50),
+              ));
   }
 }
 
