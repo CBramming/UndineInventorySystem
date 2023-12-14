@@ -100,13 +100,36 @@ class CardGrid extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text('x${item.amount}'),
+                    Row(
+                      children: [
+                        Text('x${item.amount}'),
+                        Container(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Icon(
+                            Icons.circle,
+                            color: _getIconColor(item.amount),
+                            size: 15.0,
+                             // Set the desired color for the icon
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
             ],
           ),
         ));
+  }
+}
+
+Color _getIconColor(int amount) {
+  if (amount >= 30) {
+    return Colors.green;
+  } else if (amount >= 15) {
+    return Colors.yellow;
+  } else {
+    return Colors.red;
   }
 }
 
