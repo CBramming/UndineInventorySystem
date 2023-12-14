@@ -203,3 +203,31 @@ class TextItemDescription extends StatelessWidget {
     );
   }
 }
+
+class WannaDeleteItemDialog extends StatelessWidget {
+  const WannaDeleteItemDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text(
+        'Sure you wanna delete this item?',
+        textAlign: TextAlign.center,
+      ),
+      actions: <Widget>[
+        Align(
+          alignment: Alignment.center,
+          child: ElevatedButton(
+            onPressed: () {
+              
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color.fromARGB(255, 255, 0, 0),
+            ),
+            child: const Text('Yes, delete item'),
+          ),
+        ),
+      ],
+    );
+  }
+}
