@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart'
 
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///

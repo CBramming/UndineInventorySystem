@@ -4,21 +4,21 @@ import 'package:undineinventorysystem/models/item.dart';
 import 'package:undineinventorysystem/widgets/detailed_view_widget/detailed_view_screen_widget.dart';
 import '../services/item_service.dart';
 
-class DetailedItemCounter extends StatefulWidget {
+class DetailedItemView extends StatefulWidget {
   final Item item;
   final Function(int) onAmountChanged;
 
-  const DetailedItemCounter({
+  const DetailedItemView({
     Key? key,
     required this.item,
     required this.onAmountChanged,
   }) : super(key: key);
 
   @override
-  _DetailedItemCounterState createState() => _DetailedItemCounterState();
+  _DetailedItemViewState createState() => _DetailedItemViewState();
 }
 
-class _DetailedItemCounterState extends State<DetailedItemCounter> {
+class _DetailedItemViewState extends State<DetailedItemView> {
   final ItemService _itemService = ItemService();
   final TextEditingController _inputItemsController = TextEditingController();
   final StreamController<void> _updateStreamController =
@@ -68,27 +68,38 @@ class _DetailedItemCounterState extends State<DetailedItemCounter> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text(
+          widget.item.name,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: Colors.grey[800],
+          ),
+        ),
         backgroundColor: Colors.white,
         elevation: 0,
+        centerTitle: true,
       ),
-      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              DetailedViewItemName(item: widget.item),
-              const SizedBox(height: 65.0),
               DetailedViewImage(item: widget.item),
-              const SizedBox(height: 30.0),
-              TextItemDescription(item: widget.item),
               const SizedBox(height: 20.0),
-              _buildAmountDisplay(),
+              ItemDescriptionButton(item: widget.item),
               const SizedBox(height: 20.0),
-              _buildCounterRow(),
-              const SizedBox(height: 30),
+              Text(
+                'Stock: ${widget.item.amount}',
+                style: const TextStyle(
+                    fontSize: 18.0, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10.0),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [_buildCounterRow()]),
+              const SizedBox(height: 20.0),
               _buildActionButtons(),
             ],
           ),
@@ -101,9 +112,11 @@ class _DetailedItemCounterState extends State<DetailedItemCounter> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        DecrementButton(_decrementCounter),
+        _counter > 0
+            ? DecrementButton(_decrementCounter)
+            : const SizedBox(width: 48, height: 48),
         const SizedBox(width: 20.0),
-        Text('$_counter'),
+        Text('$_counter', style: const TextStyle(fontSize: 24)),
         const SizedBox(width: 20.0),
         IncrementButton(_incrementCounter),
       ],
@@ -114,24 +127,24 @@ class _DetailedItemCounterState extends State<DetailedItemCounter> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        DeleteInputItem(
+        TakeButton(
           deleteItemsController: _inputItemsController,
           counter: _counter,
           onPressed: (String name, int count) async {
             await _itemService.updateItemReduceAmountInDB(
                 widget.item.name, _counter);
-            _updateAmount(-_counter); // Update internal amount state
+            _updateAmount(-_counter);
             _resetCounter();
           },
         ),
         const SizedBox(width: 10),
-        SendInputItem(
+        PutButton(
           inputItemsController: _inputItemsController,
           counter: _counter,
           onPressed: (String name, int count) async {
             await _itemService.updateItemAddAmountInDB(
                 widget.item.name, _counter);
-            _updateAmount(_counter); // Update internal amount state
+            _updateAmount(_counter);
             _resetCounter();
           },
         ),
@@ -140,6 +153,9 @@ class _DetailedItemCounterState extends State<DetailedItemCounter> {
   }
 
   Widget _buildAmountDisplay() {
-    return Text('Amount: $_currentAmount');
+    return Text(
+      'Stock: ${widget.item.amount}',
+      style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+    );
   }
 }

@@ -9,6 +9,12 @@ class CustomTabBar extends StatelessWidget {
       color: Color.fromARGB(255, 68, 98, 122),
       child: TabBar(
         labelPadding: EdgeInsets.symmetric(vertical: 4),
+        indicator: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(color: Colors.white, width: 4),
+          ),
+        ),
+        indicatorSize: TabBarIndicatorSize.tab,
         tabs: [
           Tab(
             child: Column(
