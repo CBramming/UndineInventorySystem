@@ -38,7 +38,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
           Expanded(
             child: CardGrid(
               searchString: _searchString,
-              filteredItems: [],
+              filteredItems: const [],
             ),
           ),
         ],

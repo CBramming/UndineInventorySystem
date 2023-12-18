@@ -61,7 +61,7 @@ class CardGrid extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => DetailedItemCounter(
+              builder: (context) => DetailedItemView(
                 item: item,
                 onAmountChanged: (int) {},
               ),
@@ -109,7 +109,7 @@ class CardGrid extends StatelessWidget {
                             Icons.circle,
                             color: _getIconColor(item.amount),
                             size: 15.0,
-                             // Set the desired color for the icon
+                            // Set the desired color for the icon
                           ),
                         ),
                       ],

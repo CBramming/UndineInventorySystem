@@ -3,7 +3,6 @@ import 'package:undineinventorysystem/models/item.dart';
 import 'package:undineinventorysystem/screens/detailed_view_screen.dart';
 import 'package:undineinventorysystem/services/item_service.dart';
 import '../widgets/manuel_get_item_widget/manuel_get_item_screen_widgets.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ManuelGetItem extends StatelessWidget {
   ManuelGetItem({super.key});
@@ -22,7 +21,7 @@ class ManuelGetItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               const SizedBox(height: 200),
-              const ManuelGetItemTitel(),
+              const ManualGetItemTitle(),
               const SizedBox(height: 50),
               InputItem(inputitemscontroller: inputitemscontroller),
               const SizedBox(height: 130),
@@ -45,7 +44,7 @@ class ManuelGetItem extends StatelessWidget {
       Item? item = (await ItemService().getItemFromDB(nameId));
       if (nameId.isNotEmpty && item != null) {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => DetailedItemCounter(item: item, onAmountChanged: (int ) {  },),
+          builder: (context) => DetailedItemView(item: item, onAmountChanged: (int ) {  },),
         ));
       } else {
         print('Item Not Found');
