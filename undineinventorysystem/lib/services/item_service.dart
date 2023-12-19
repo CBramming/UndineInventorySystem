@@ -127,6 +127,9 @@ class ItemService {
 
   Future<List<Item>> getAllItems() async {
     try {
+      // Introduce a delay for testing purposes
+      await Future.delayed(Duration(seconds: 1));
+
       QuerySnapshot querySnapshot =
           await FirebaseFirestore.instance.collection('Items').get();
       return querySnapshot.docs

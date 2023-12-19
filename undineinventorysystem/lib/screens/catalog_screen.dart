@@ -15,7 +15,6 @@ class CatalogScreen extends StatefulWidget {
 class _CatalogScreenState extends State<CatalogScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchString = '';
-  late StreamSubscription<void> updateSubscription;
   late Future<List<Item>> itemsFuture;
   List<Item> items = [];
 
@@ -67,7 +66,6 @@ class _CatalogScreenState extends State<CatalogScreen> {
   @override
   void dispose() {
     _searchController.dispose();
-    updateSubscription.cancel(); // Cancel the subscription
     super.dispose();
   }
 }

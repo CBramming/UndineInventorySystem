@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:undineinventorysystem/models/item.dart';
 import 'package:undineinventorysystem/screens/detailed_view_screen.dart';
@@ -21,7 +22,10 @@ class CardGrid extends StatelessWidget {
       future: ItemService().getAllItems(),
       builder: (BuildContext context, AsyncSnapshot<List<Item>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return const CupertinoActivityIndicator(
+            animating: true,
+            radius: 20,
+          );
         }
 
         if (snapshot.hasError) {
