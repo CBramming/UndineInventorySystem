@@ -1,23 +1,71 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:undineinventorysystem/models/item.dart';
 import 'package:undineinventorysystem/screens/catalog_screen.dart';
+import 'package:undineinventorysystem/screens/detailed_view_screen.dart';
 import 'package:undineinventorysystem/screens/manual_get_item.dart';
+import 'package:undineinventorysystem/services/item_service.dart';
 import 'package:undineinventorysystem/widgets/custom_widgets/person_dropdown_menu_widget.dart';
 import 'package:undineinventorysystem/widgets/qr_scanner_screen_widget/qr_scanner_widget.dart';
 
 import 'package:undineinventorysystem/widgets/custom_widgets/tab_bar.dart';
 
-class QRScannerScreen extends StatelessWidget {
+class QRScannerScreen extends StatefulWidget {
   const QRScannerScreen({Key? key}) : super(key: key);
 
-  void handleScanResult(Barcode? result) {
-    // Handle the result as needed
-    if (result != null) {
-      // Do something with the scanned result
+  @override
+  State<QRScannerScreen> createState() => _QRScannerScreenState();
+}
+
+class _QRScannerScreenState extends State<QRScannerScreen> {
+  QRViewController? controller;
+  bool isNavigating = false;
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
+  }
+
+  void handleScanResult(Barcode result) async {
+    print('handleScanResult called with: ${result.code}'); // Debug print
+
+    if (!isNavigating && result.code != null) {
+      setState(() {
+        isNavigating = true;
+      });
+
+      controller?.pauseCamera();
       print('Scanned result: ${result.code}');
+
+      ItemService itemService = ItemService();
+      Item? item = await itemService.getItemFromDB(result.code!);
+
+      if (item != null) {
+        print('Item found, navigating to detailed view.'); // Debug print
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailedItemView(
+              item: item,
+              onAmountChanged: (_) {},
+            ),
+          ),
+        );
+      } else {
+        print('Item not found in database.'); // Debug print
+      }
+
+      if (mounted) {
+        setState(() {
+          isNavigating = false;
+        });
+        controller?.resumeCamera();
+      }
     } else {
-      // Handle no result
-      print('No result');
+      print('No result or isNavigating is true.'); // Debug print
     }
   }
 
@@ -35,13 +83,21 @@ class QRScannerScreen extends StatelessWidget {
               Navigator.of(context).pop();
             },
           ),
-          actions: const <Widget>[
-            PersonDropdownMenu(),
-          ],
+          actions: const [PersonDropdownMenu()],
         ),
         body: TabBarView(
           children: [
-            QRScannerWidget(onScanResult: handleScanResult),
+            QRScannerWidget(
+              onQRViewCreated: (QRViewController qrViewController) {
+                setState(() {
+                  controller = qrViewController;
+                });
+                qrViewController.scannedDataStream.listen((scanData) {
+                  handleScanResult(scanData);
+                });
+              },
+              onScanResult: handleScanResult,
+            ),
             ManuelGetItem(),
             const CatalogScreen(),
           ],
