@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:undineinventorysystem/models/item.dart';
+import 'package:undineinventorysystem/services/item_service.dart';
 import 'package:undineinventorysystem/widgets/catalog_widgets/catalog_widgets.dart';
 
 class CatalogScreen extends StatefulWidget {
@@ -11,6 +15,9 @@ class CatalogScreen extends StatefulWidget {
 class _CatalogScreenState extends State<CatalogScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchString = '';
+  late StreamSubscription<void> updateSubscription;
+  late Future<List<Item>> itemsFuture;
+  List<Item> items = [];
 
   @override
   void initState() {
@@ -19,6 +26,14 @@ class _CatalogScreenState extends State<CatalogScreen> {
       setState(() {
         _searchString = _searchController.text;
       });
+    });
+
+    itemsFuture = ItemService().getAllItems();
+  }
+
+  void refreshItems() {
+    setState(() {
+      itemsFuture = ItemService().getAllItems();
     });
   }
 
@@ -38,7 +53,10 @@ class _CatalogScreenState extends State<CatalogScreen> {
           Expanded(
             child: CardGrid(
               searchString: _searchString,
-              filteredItems: const [],
+              filteredItems: items
+                  .where((item) => item.name.contains(_searchString))
+                  .toList(),
+              refreshCatalog: refreshItems,
             ),
           ),
         ],
@@ -49,6 +67,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
   @override
   void dispose() {
     _searchController.dispose();
+    updateSubscription.cancel(); // Cancel the subscription
     super.dispose();
   }
 }

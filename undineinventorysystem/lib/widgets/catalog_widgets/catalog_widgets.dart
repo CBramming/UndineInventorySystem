@@ -5,11 +5,14 @@ import 'package:undineinventorysystem/services/item_service.dart';
 
 class CardGrid extends StatelessWidget {
   final String searchString;
+  final List<Item> filteredItems;
+  final Function refreshCatalog;
 
   const CardGrid({
     super.key,
     required this.searchString,
-    required List<Item> filteredItems,
+    required this.filteredItems,
+    required this.refreshCatalog,
   });
 
   @override
@@ -58,8 +61,8 @@ class CardGrid extends StatelessWidget {
 
   Widget buildCard(BuildContext context, Item item) {
     return InkWell(
-        onTap: () {
-          Navigator.of(context).push(
+        onTap: () async {
+          await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => DetailedItemView(
                 item: item,
@@ -67,6 +70,7 @@ class CardGrid extends StatelessWidget {
               ),
             ),
           );
+          refreshCatalog();
         },
         child: Card(
           shape: RoundedRectangleBorder(

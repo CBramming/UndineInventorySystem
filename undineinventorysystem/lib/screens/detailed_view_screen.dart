@@ -76,6 +76,12 @@ class _DetailedItemViewState extends State<DetailedItemView> {
             color: Colors.grey[800],
           ),
         ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
