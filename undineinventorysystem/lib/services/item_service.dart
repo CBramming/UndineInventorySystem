@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:undineinventorysystem/models/item.dart';
 import 'dart:async';
+
+import 'package:undineinventorysystem/widgets/detailed_view_widget/detailed_view_screen_widget.dart';
 
 class ItemService {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -9,7 +12,6 @@ class ItemService {
   StreamController<void> _updateStreamController =
       StreamController<void>.broadcast();
 
-  // Getter for the stream
   Stream<void> get updateStream => _updateStreamController.stream;
 
   Future<void> addItemToDB(String nameId, int amount) async {
@@ -25,8 +27,9 @@ class ItemService {
     }
   }
 
-  Future<void> updateItemReduceAmountInDB(
-      String nameId, int amountToReduce) async {
+  Future<bool> updateItemReduceAmountInDB(
+      String nameId, int amountToReduce, BuildContext context,
+      {bool showConfirmationDialog = true}) async {
     try {
       CollectionReference items =
           FirebaseFirestore.instance.collection('Items');
@@ -35,29 +38,33 @@ class ItemService {
           await items.where('Name', isEqualTo: nameId).get();
 
       for (QueryDocumentSnapshot doc in querySnapshot.docs) {
-        // Get the current item from the document
         Item currentItem =
             Item.fromFirestore(doc.data() as Map<String, dynamic>);
 
-        // Calculate the new amount after reducing
         int newAmount = currentItem.amount - amountToReduce;
 
         if (newAmount >= 0) {
-          // Update the document with individual fields
           await doc.reference.update({
             'Amount': newAmount,
           });
 
-          // Notify the stream controller that the item has been updated
           _updateStreamController.add(null);
-        } else {
-          // If the new amount is negative, you may choose to delete the document
-          await doc.reference.delete();
+          return true;
+        } else if (newAmount < 0 && showConfirmationDialog) {
+          bool deleteItem = await showDeleteConfirmationDialog(context);
+          if (deleteItem) {
+            await doc.reference.delete();
+            Navigator.of(context).pop();
+            return true;
+          } else {
+            return false;
+          }
         }
       }
-    } catch (e) {
-      print('Error updating item amount: $e');
+    } on FirebaseException catch (e) {
+      return false;
     }
+    return false;
   }
 
   Future<void> updateItemAddAmountInDB(String nameId, int amountToAdd) async {
@@ -69,19 +76,13 @@ class ItemService {
           await items.where('Name', isEqualTo: nameId).get();
 
       for (QueryDocumentSnapshot doc in querySnapshot.docs) {
-        // Get the current item from the document
         Item currentItem =
             Item.fromFirestore(doc.data() as Map<String, dynamic>);
 
-        // Calculate the new amount after adding
         int newAmount = currentItem.amount + amountToAdd;
-
-        // Update the document with individual fields
         await doc.reference.update({
           'Amount': newAmount,
         });
-
-        // Notify the stream controller that the item has been updated
         _updateStreamController.add(null);
       }
     } catch (e) {
@@ -112,11 +113,9 @@ class ItemService {
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        // If there is a matching document, return the first one
         return Item.fromFirestore(
             querySnapshot.docs[0].data() as Map<String, dynamic>);
       } else {
-        // Return null if no matching document is found
         return null;
       }
     } catch (e) {
@@ -127,7 +126,6 @@ class ItemService {
 
   Future<List<Item>> getAllItems() async {
     try {
-      // Introduce a delay for testing purposes
       await Future.delayed(Duration(seconds: 1));
 
       QuerySnapshot querySnapshot =
@@ -137,7 +135,6 @@ class ItemService {
           .toList();
     } catch (e) {
       print('Error fetching items: $e');
-      // Consider a different error handling strategy here
       return [];
     }
   }
