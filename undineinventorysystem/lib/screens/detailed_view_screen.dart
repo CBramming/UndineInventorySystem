@@ -137,10 +137,16 @@ class _DetailedItemViewState extends State<DetailedItemView> {
           deleteItemsController: _inputItemsController,
           counter: _counter,
           onPressed: (String name, int count) async {
-            await _itemService.updateItemReduceAmountInDB(
-                widget.item.name, _counter);
-            _updateAmount(-_counter);
-            _resetCounter();
+            bool updateSuccessful =
+                await _itemService.updateItemReduceAmountInDB(
+                    widget.item.name, _counter, context);
+
+            if (updateSuccessful) {
+              _updateAmount(-_counter);
+              _resetCounter();
+            } else {
+              _resetCounter();
+            }
           },
         ),
         const SizedBox(width: 10),
