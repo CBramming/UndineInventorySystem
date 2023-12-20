@@ -261,30 +261,35 @@ class ItemDescriptionText extends StatelessWidget {
   }
 }
 
-class WannaDeleteItemDialog extends StatelessWidget {
-  const WannaDeleteItemDialog({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text(
-        'Sure you wanna delete this item?',
-        textAlign: TextAlign.center,
-      ),
-      actions: <Widget>[
-        Align(
-          alignment: Alignment.center,
-          child: ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(255, 255, 0, 0),
-            ),
-            child: const Text('Yes, delete item'),
-          ),
+Future<bool> showDeleteConfirmationDialog(BuildContext context) async {
+  return await showDialog<bool>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text(
+          'Sure you wanna delete this item?',
+          textAlign: TextAlign.center,
         ),
-      ],
-    );
-  }
+        actions: <Widget>[
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop(true); // Return true when confirmed
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color.fromARGB(255, 203, 0, 0),
+            ),
+            child: const Text('Yes, delete item', style: TextStyle(color: Colors.white)),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(false); // Return false when canceled
+            },
+            child: const Text('Cancel', style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
+          ),
+        ],
+      );
+    },
+  ) ?? false; // Return false if the dialog is dismissed
 }
 
 class ItemDescriptionButton extends StatelessWidget {
