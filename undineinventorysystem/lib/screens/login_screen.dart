@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:undineinventorysystem/screens/qr_scanner_screen.dart';
 import 'package:undineinventorysystem/screens/sign_up_screen.dart';
+import 'package:undineinventorysystem/widgets/custom_widgets/logo_widget.dart';
 import 'package:undineinventorysystem/utils/alert_dialog_utils.dart';
 import '../widgets/login_widgets/login_screen_widgets.dart';
 import '../services/auth_service.dart';
@@ -29,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               const SizedBox(height: 200),
-              const LoginTitle(),
+              const LogoWidget(),
               const SizedBox(height: 48.0),
               UsernameInputField(controller: emailController),
               const SizedBox(height: 16.0),

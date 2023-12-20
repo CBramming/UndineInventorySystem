@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:undineinventorysystem/screens/login_screen.dart';
 import 'package:undineinventorysystem/screens/qr_scanner_screen.dart';
 import 'package:undineinventorysystem/services/auth_service.dart';
+import 'package:undineinventorysystem/widgets/custom_widgets/logo_widget.dart';
 import 'package:undineinventorysystem/utils/alert_dialog_utils.dart';
 import 'package:undineinventorysystem/widgets/sign_up_widgets/sign_up_screen_widget.dart';
 
@@ -30,7 +31,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               const SizedBox(height: 150.0),
-              const SignUpTitle(),
+              const LogoWidget(),
               const SizedBox(height: 48.0),
               EmailInputField(controller: emailController),
               const SizedBox(height: 16.0),
@@ -40,7 +41,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   controller: confirmationPasswordController),
               const SizedBox(height: 50.0),
               SignUpPush(onSignUpPush: () => signUp(context)),
-              const SizedBox(height: 150.0),
+              const SizedBox(height: 90.0),
               const AlreadyHaveAnAccount(),
               const SizedBox(height: 5.0),
               BackToLogin(
