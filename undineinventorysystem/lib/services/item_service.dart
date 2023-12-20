@@ -12,19 +12,6 @@ class ItemService {
   // Getter for the stream
   Stream<void> get updateStream => _updateStreamController.stream;
 
-  Future<void> addItemToDB(String nameId, int amount) async {
-    try {
-      CollectionReference items = firestore.collection('Items');
-
-      await items.add({
-        'something': nameId,
-        'amount2': amount,
-      });
-    } catch (e) {
-      print('Error');
-    }
-  }
-
   Future<void> updateItemReduceAmountInDB(
       String nameId, int amountToReduce) async {
     try {
@@ -86,21 +73,6 @@ class ItemService {
       }
     } catch (e) {
       print('Error updating item amount: $e');
-    }
-  }
-
-  Future<void> deleteItemToDB(String nameId, int amount) async {
-    try {
-      CollectionReference items = firestore.collection('Items');
-
-      QuerySnapshot querySnapshot =
-          await items.where('Name', isEqualTo: nameId).get();
-
-      for (QueryDocumentSnapshot doc in querySnapshot.docs) {
-        await doc.reference.delete();
-      }
-    } catch (e) {
-      print('Error');
     }
   }
 
