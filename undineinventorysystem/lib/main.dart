@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:undineinventorysystem/firebase_options.dart';
-import 'package:undineinventorysystem/screens/qr_scanner_screen.dart';
 import 'screens/login_screen.dart';
 
 void main() async {
@@ -20,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Undine Inventory',
       theme: ThemeData(fontFamily: 'OpenSans'),
-      home: const QRScannerScreen(),
+      home: const LoginScreen(),
     );
   }
 }
