@@ -2,14 +2,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:undineinventorysystem/screens/qr_scanner_screen.dart';
 import 'package:undineinventorysystem/screens/sign_up_screen.dart';
+import 'package:undineinventorysystem/utils/alert_dialog_utils.dart';
 import '../widgets/login_widgets/login_screen_widgets.dart';
 import '../services/auth_service.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
-  LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +42,7 @@ class LoginScreen extends StatelessWidget {
               SignUpPrompt(
                 onSignUpPrompt: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SignUp()));
+                      MaterialPageRoute(builder: (context) => const SignUpScreen()));
                 },
               ),
             ],
@@ -50,45 +56,48 @@ class LoginScreen extends StatelessWidget {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
-    print('Attempting to sign in with Email: $email'); // Debugging
-
     if (email.isEmpty || password.isEmpty) {
-      print('Email or password is empty'); // Debugging
-       showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return const PasswordOrEmailEmptyDialog();
-          },
-        );
-      // TODO: Handle empty fields, show an error message, etc.
+      AlertDialogUtils.showErrorAlertDialog(
+        context,
+        title: 'Error',
+        message: 'Email or password cannot be empty',
+      );
       return;
     }
 
     try {
-      User? user = await AuthService().signInWithEmailAndPassword(email, password);
-      print('Firebase Auth Response User: $user'); // Debugging
+      User? user =
+          await AuthService().signInWithEmailAndPassword(email, password);
+
+      if (!mounted) return;
 
       if (user != null) {
-        // ignore: use_build_context_synchronously
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const QRScannerScreen()));
-      }
-      else {
-        print('User is null after sign in attempt'); // Debugging
-        // TODO: Handle null user (not signed in), show an error message
-        // Display the PasswordOrEmailWrongDialog when login fails
-        // ignore: use_build_context_synchronously
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return const PasswordOrEmailWrongDialog();
-          },
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const QRScannerScreen()));
+      } else {
+        AlertDialogUtils.showErrorAlertDialog(
+          context,
+          title: 'Login Failed',
+          message: 'Wrong email or password. Please try again.',
         );
         emailController.clear();
         passwordController.clear();
       }
     } catch (e) {
-      print('Sign in error: $e'); // Debugging
-      // TODO: Handle the error, show error message
+      if (!mounted) return;
+
+      AlertDialogUtils.showErrorAlertDialog(
+        context,
+        title: 'Sign In Error',
+        message: 'An error occurred during sign in. Please try again later.',
+      );
     }
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 }

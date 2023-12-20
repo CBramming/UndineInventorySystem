@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:undineinventorysystem/models/item.dart';
@@ -45,6 +43,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
 
       if (item != null) {
         print('Item found, navigating to detailed view.'); // Debug print
+        // ignore: use_build_context_synchronously
         await Navigator.push(
           context,
           MaterialPageRoute(
