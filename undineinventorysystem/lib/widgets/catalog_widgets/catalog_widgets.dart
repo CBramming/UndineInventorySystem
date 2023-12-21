@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:undineinventorysystem/models/item.dart';
 import 'package:undineinventorysystem/screens/detailed_view_screen.dart';
 import 'package:undineinventorysystem/services/item_service.dart';
+import 'package:undineinventorysystem/utils/error_handler.dart';
 
 class CardGrid extends StatelessWidget {
   final String searchString;
@@ -18,9 +19,10 @@ class CardGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Item>>(
-      future: ItemService().getAllItems(),
-      builder: (BuildContext context, AsyncSnapshot<List<Item>> snapshot) {
+    return FutureBuilder<Map<String, dynamic>>(
+      future: ItemService().getAllItems(), // Updated to expect a Map
+      builder:
+          (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CupertinoActivityIndicator(
             animating: true,
@@ -29,22 +31,31 @@ class CardGrid extends StatelessWidget {
         }
 
         if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+          return Text('Error fetching items: ${snapshot.error}');
         }
 
-        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+        var result = snapshot.data;
+        List<Item> items = result?['items'] ?? [];
+        UpdateError error = result?['error'] ?? UpdateError.none;
+
+        if (error != UpdateError.none) {
+          ErrorHandler.handleError(error, context);
+          return const Text('Failed to load items.');
+        }
+
+        if (items.isEmpty) {
           return const Text('No items found');
         }
 
-        List<Item> items = searchString.isEmpty
-            ? snapshot.data!
-            : snapshot.data!.where((item) {
+        List<Item> filteredItems = searchString.isEmpty
+            ? items
+            : items.where((item) {
                 return item.name
                     .toLowerCase()
                     .contains(searchString.toLowerCase());
               }).toList();
 
-        return buildGridView(items, context);
+        return buildGridView(filteredItems, context);
       },
     );
   }
@@ -65,26 +76,28 @@ class CardGrid extends StatelessWidget {
 
   Widget buildCard(BuildContext context, Item item) {
     return InkWell(
-        onTap: () async {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => DetailedItemView(
-                item: item,
-                onAmountChanged: (int) {},
-              ),
+      onTap: () async {
+        await Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => DetailedItemView(
+              item: item,
+              onAmountChanged: (int) {},
             ),
-          );
-          refreshCatalog();
-        },
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
           ),
-          elevation: 5,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
+        );
+        refreshCatalog();
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+        ),
+        elevation: 5,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: AspectRatio(
+                aspectRatio: 16 / 9,
                 child: (item.imageUrl != 'No Image')
                     ? Image.network(
                         item.imageUrl,
@@ -95,39 +108,40 @@ class CardGrid extends StatelessWidget {
                         child: const Icon(Icons.image, size: 50),
                       ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      item.name,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.name,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
                     ),
-                    const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        Text('x${item.amount}'),
-                        Container(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Icon(
-                            Icons.circle,
-                            color: _getIconColor(item.amount),
-                            size: 15.0,
-                            // Set the desired color for the icon
-                          ),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Text('x${item.amount}'),
+                      Container(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Icon(
+                          Icons.circle,
+                          color: _getIconColor(item.amount),
+                          size: 15.0,
                         ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
-        ));
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

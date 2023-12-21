@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:undineinventorysystem/models/item.dart';
+import 'package:undineinventorysystem/utils/error_handler.dart';
 import 'package:undineinventorysystem/widgets/detailed_view_widget/detailed_view_screen_widget.dart';
 import '../services/item_service.dart';
 
@@ -70,10 +71,10 @@ class _DetailedItemViewState extends State<DetailedItemView> {
       appBar: AppBar(
         title: Text(
           widget.item.name,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
-            color: Colors.grey[800],
+            color: Colors.black87,
           ),
         ),
         leading: IconButton(
@@ -137,16 +138,19 @@ class _DetailedItemViewState extends State<DetailedItemView> {
           deleteItemsController: _inputItemsController,
           counter: _counter,
           onPressed: (String name, int count) async {
-            bool updateSuccessful =
+            Map<String, dynamic> updateResult =
                 await _itemService.updateItemReduceAmountInDB(
                     widget.item.name, _counter, context);
+            bool updateSuccessful = updateResult['success'];
 
             if (updateSuccessful) {
               _updateAmount(-_counter);
-              _resetCounter();
             } else {
-              _resetCounter();
+              UpdateError error = updateResult['error'];
+              ErrorHandler.handleError(
+                  error, context); // Handle errors using the ErrorHandler class
             }
+            _resetCounter();
           },
         ),
         const SizedBox(width: 10),
@@ -154,20 +158,19 @@ class _DetailedItemViewState extends State<DetailedItemView> {
           inputItemsController: _inputItemsController,
           counter: _counter,
           onPressed: (String name, int count) async {
-            await _itemService.updateItemAddAmountInDB(
-                widget.item.name, _counter);
-            _updateAmount(_counter);
+            Map<String, dynamic> addResult = await _itemService
+                .updateItemAddAmountInDB(widget.item.name, _counter);
+            if (!addResult['success']) {
+              UpdateError error = addResult['error'];
+              ErrorHandler.handleError(
+                  error, context); // Handle errors for adding amount
+            } else {
+              _updateAmount(_counter);
+            }
             _resetCounter();
           },
         ),
       ],
-    );
-  }
-
-  Widget _buildAmountDisplay() {
-    return Text(
-      'Stock: ${widget.item.amount}',
-      style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
     );
   }
 }

@@ -13,7 +13,8 @@ class SignUpPush extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onSignUpPush,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromARGB(255, 68, 98, 122),
+          elevation: 5,
+          backgroundColor: const Color.fromARGB(218, 1, 15, 58),
           padding: const EdgeInsets.symmetric(vertical: 5.0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
@@ -21,7 +22,7 @@ class SignUpPush extends StatelessWidget {
         ),
         child: const Text(
           'Signup',
-          style: TextStyle(fontSize: 18),
+          style: TextStyle(fontSize: 18, color: Colors.white),
         ),
       ),
     );
@@ -48,11 +49,29 @@ class EmailInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const Color borderColor = Color.fromARGB(255, 0, 0, 0);
+
     return TextFormField(
       controller: controller,
+      cursorColor: borderColor,
+      style: const TextStyle(color: borderColor),
       decoration: const InputDecoration(
         labelText: 'Email',
-        suffixIcon: Icon(Icons.person_outline),
+        labelStyle: TextStyle(
+            color: borderColor, fontSize: 16, fontWeight: FontWeight.w500),
+        suffixIcon: Icon(Icons.person_outline, color: borderColor),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            width: 1,
+            color: borderColor,
+          ),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            width: 2,
+            color: borderColor,
+          ),
+        ),
       ),
     );
   }
@@ -65,11 +84,29 @@ class PasswordInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const Color borderColor = Color.fromARGB(255, 0, 0, 0);
+
     return TextFormField(
       controller: controller,
+      cursorColor: borderColor,
+      style: const TextStyle(color: borderColor),
       decoration: const InputDecoration(
         labelText: 'Password',
-        suffixIcon: Icon(Icons.lock_outline),
+        labelStyle: TextStyle(
+            color: borderColor, fontSize: 16, fontWeight: FontWeight.w500),
+        suffixIcon: Icon(Icons.lock_outline, color: borderColor),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            width: 1,
+            color: borderColor,
+          ),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            width: 2,
+            color: borderColor,
+          ),
+        ),
       ),
       obscureText: true,
     );
@@ -83,11 +120,29 @@ class ConfirmationPasswordInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const Color borderColor = Color.fromARGB(255, 0, 0, 0);
+
     return TextFormField(
       controller: controller,
+      cursorColor: borderColor,
+      style: const TextStyle(color: borderColor),
       decoration: const InputDecoration(
         labelText: 'Confirm Password',
-        suffixIcon: Icon(Icons.lock_outline),
+        labelStyle: TextStyle(
+            color: borderColor, fontSize: 16, fontWeight: FontWeight.w500),
+        suffixIcon: Icon(Icons.lock_outline, color: borderColor),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            width: 1,
+            color: borderColor,
+          ),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            width: 2,
+            color: borderColor,
+          ),
+        ),
       ),
       obscureText: true,
     );
@@ -102,7 +157,7 @@ class AlreadyHaveAnAccount extends StatelessWidget {
     return const Text(
       'Already have an account?',
       textAlign: TextAlign.center,
-      style: TextStyle(fontSize: 14),
+      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
     );
   }
 }
@@ -116,7 +171,13 @@ class BackToLogin extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: onBackToLogin,
-      child: const Text('Login'),
+      child: const Text(
+        'Login',
+        style: TextStyle(
+          fontSize: 14,
+          color: Color.fromARGB(255, 0, 102, 255),
+        ),
+      ),
     );
   }
 }

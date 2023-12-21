@@ -110,7 +110,8 @@ class PutButton extends StatelessWidget {
       height: 50,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromARGB(255, 21, 36, 82),
+          elevation: 5,
+          backgroundColor: const Color.fromARGB(218, 1, 15, 58),
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
@@ -145,10 +146,11 @@ class TakeButton extends StatelessWidget {
       height: 50,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
+          elevation: 5,
           backgroundColor: Colors.white,
-          foregroundColor: const Color.fromARGB(255, 10, 17, 40),
-          side: const BorderSide(
-              color: Color.fromARGB(255, 10, 17, 40), width: 2),
+          foregroundColor: const Color.fromARGB(218, 1, 15, 58),
+          side:
+              const BorderSide(color: Color.fromARGB(218, 1, 15, 58), width: 2),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
@@ -259,37 +261,6 @@ class ItemDescriptionText extends StatelessWidget {
       maxLines: 7,
     );
   }
-}
-
-Future<bool> showDeleteConfirmationDialog(BuildContext context) async {
-  return await showDialog<bool>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text(
-          'Sure you wanna delete this item?',
-          textAlign: TextAlign.center,
-        ),
-        actions: <Widget>[
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop(true); // Return true when confirmed
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color.fromARGB(255, 203, 0, 0),
-            ),
-            child: const Text('Yes, delete item', style: TextStyle(color: Colors.white)),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(false); // Return false when canceled
-            },
-            child: const Text('Cancel', style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
-          ),
-        ],
-      );
-    },
-  ) ?? false; // Return false if the dialog is dismissed
 }
 
 class ItemDescriptionButton extends StatelessWidget {

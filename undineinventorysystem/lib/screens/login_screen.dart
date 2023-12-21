@@ -32,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 200),
               const LogoWidget(),
               const SizedBox(height: 48.0),
-              UsernameInputField(controller: emailController),
+              EmailInputField(controller: emailController),
               const SizedBox(height: 16.0),
               PasswordInputField(controller: passwordController),
               const SizedBox(height: 50.0),
@@ -42,8 +42,10 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 150.0),
               SignUpPrompt(
                 onSignUpPrompt: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const SignUpScreen()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SignUpScreen()));
                 },
               ),
             ],
