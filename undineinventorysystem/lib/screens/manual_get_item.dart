@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:undineinventorysystem/models/item.dart';
 import 'package:undineinventorysystem/screens/detailed_view_screen.dart';
 import 'package:undineinventorysystem/services/item_service.dart';
-import '../widgets/manuel_get_item_widget/manuel_get_item_screen_widgets.dart';
+import 'package:undineinventorysystem/utils/alert_dialog_utils.dart';
+import 'package:undineinventorysystem/utils/error_handler.dart';
+import '../widgets/manual_get_item_widget/manuel_get_item_screen_widgets.dart';
 
 class ManuelGetItem extends StatelessWidget {
   ManuelGetItem({super.key});
@@ -23,10 +25,10 @@ class ManuelGetItem extends StatelessWidget {
               const SizedBox(height: 200),
               const ManualGetItemTitle(),
               const SizedBox(height: 50),
-              InputItem(inputitemscontroller: inputitemscontroller),
-              const SizedBox(height: 130),
+              InputItem(inputItemsController: inputitemscontroller),
+              const SizedBox(height: 60),
               GetInputItem(
-                getinputitemscontroller: inputitemscontroller,
+                getInputitemsController: inputitemscontroller,
                 onPressed: (String name) {
                   getItem(context);
                 },
@@ -40,17 +42,29 @@ class ManuelGetItem extends StatelessWidget {
 
   void getItem(BuildContext context) async {
     String nameId = inputitemscontroller.text.trim();
-    try {
-      Item? item = (await ItemService().getItemFromDB(nameId));
-      if (nameId.isNotEmpty && item != null) {
+    if (nameId.isNotEmpty) {
+      var result = await ItemService().getItemFromDB(nameId);
+      Item? item = result['item'];
+      UpdateError error = result['error'];
+
+      if (item != null) {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => DetailedItemView(item: item, onAmountChanged: (int ) {  },),
+          builder: (context) => DetailedItemView(
+            item: item,
+            onAmountChanged: (int) {},
+          ),
         ));
       } else {
-        print('Item Not Found');
+        // Handle the error using the ErrorHandler
+        ErrorHandler.handleError(error, context);
       }
-    } catch (e) {
-      print('Error fetching item: $e');
+    } else {
+      // Handle empty input case
+      AlertDialogUtils.showErrorAlertDialog(
+        context,
+        title: 'Empty Input',
+        message: 'Please enter a valid item name.',
+      );
     }
   }
 }

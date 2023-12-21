@@ -13,18 +13,36 @@ class LoginTitle extends StatelessWidget {
   }
 }
 
-class UsernameInputField extends StatelessWidget {
+class EmailInputField extends StatelessWidget {
   final TextEditingController controller;
 
-  const UsernameInputField({super.key, required this.controller});
+  const EmailInputField({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
+    const Color borderColor = Color.fromARGB(255, 0, 0, 0);
+
     return TextFormField(
       controller: controller,
+      cursorColor: borderColor,
+      style: const TextStyle(color: borderColor),
       decoration: const InputDecoration(
         labelText: 'Email',
-        suffixIcon: Icon(Icons.person_outline),
+        labelStyle: TextStyle(
+            color: borderColor, fontSize: 16, fontWeight: FontWeight.w500),
+        suffixIcon: Icon(Icons.person_outline, color: borderColor),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            width: 1,
+            color: borderColor,
+          ),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            width: 2,
+            color: borderColor,
+          ),
+        ),
       ),
     );
   }
@@ -37,11 +55,29 @@ class PasswordInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const Color borderColor = Color.fromARGB(255, 0, 0, 0);
+
     return TextFormField(
       controller: controller,
+      cursorColor: borderColor,
+      style: const TextStyle(color: borderColor),
       decoration: const InputDecoration(
         labelText: 'Password',
-        suffixIcon: Icon(Icons.lock_outline),
+        labelStyle: TextStyle(
+            color: borderColor, fontSize: 16, fontWeight: FontWeight.w500),
+        suffixIcon: Icon(Icons.lock_outline, color: borderColor),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            width: 1,
+            color: borderColor,
+          ),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            width: 2,
+            color: borderColor,
+          ),
+        ),
       ),
       obscureText: true,
     );
@@ -61,7 +97,8 @@ class LoginButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onLogin,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromARGB(255, 68, 98, 122),
+          elevation: 5,
+          backgroundColor: const Color.fromARGB(218, 1, 15, 58),
           padding: const EdgeInsets.symmetric(vertical: 5.0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
@@ -85,7 +122,9 @@ class SignUpPrompt extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: onSignUpPrompt,
-      child: const Text('Sign up here'),
+      child: const Text('Sign up here',
+          style:
+              TextStyle(color: Color.fromARGB(255, 0, 102, 255), fontSize: 14)),
     );
   }
 }

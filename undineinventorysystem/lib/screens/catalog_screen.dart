@@ -15,7 +15,7 @@ class CatalogScreen extends StatefulWidget {
 class _CatalogScreenState extends State<CatalogScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchString = '';
-  late Future<List<Item>> itemsFuture;
+  late Future<Map<String, dynamic>> itemsFuture;
   List<Item> items = [];
 
   @override

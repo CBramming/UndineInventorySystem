@@ -6,7 +6,7 @@ class CustomTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Material(
-      color: Color.fromARGB(255, 68, 98, 122),
+      color: Color.fromARGB(218, 1, 15, 58),
       child: TabBar(
         labelPadding: EdgeInsets.symmetric(vertical: 4),
         indicator: BoxDecoration(

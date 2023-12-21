@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:undineinventorysystem/models/item.dart';
+import 'package:undineinventorysystem/utils/alert_dialog_utils.dart';
+import 'package:undineinventorysystem/utils/error_handler.dart';
 import 'dart:async';
 
 import 'package:undineinventorysystem/widgets/detailed_view_widget/detailed_view_screen_widget.dart';
@@ -8,12 +10,10 @@ import 'package:undineinventorysystem/widgets/detailed_view_widget/detailed_view
 class ItemService {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-// Define the stream controller here
-  StreamController<void> _updateStreamController =
+  final StreamController<void> _updateStreamController =
       StreamController<void>.broadcast();
 
   Stream<void> get updateStream => _updateStreamController.stream;
-  
 
   Future<void> addItemToDB(String nameId, int amount) async {
     try {
@@ -28,7 +28,7 @@ class ItemService {
     }
   }
 
-  Future<bool> updateItemReduceAmountInDB(
+  Future<Map<String, dynamic>> updateItemReduceAmountInDB(
       String nameId, int amountToReduce, BuildContext context,
       {bool showConfirmationDialog = true}) async {
     try {
@@ -50,48 +50,51 @@ class ItemService {
           });
 
           _updateStreamController.add(null);
-          return true;
+          return {'success': true, 'error': UpdateError.none};
         } else if (newAmount < 0 && showConfirmationDialog) {
-          bool deleteItem = await showDeleteConfirmationDialog(context);
+          bool deleteItem =
+              await AlertDialogUtils.showDeleteConfirmationDialog(context);
           if (deleteItem) {
             await doc.reference.delete();
             Navigator.of(context).pop();
-            return true;
+            return deleteItem
+                ? {'success': true, 'error': UpdateError.none}
+                : {'success': false, 'error': UpdateError.userCancelled};
           } else {
-            return false;
+            return {'success': false, 'error': UpdateError.firebaseError};
           }
         }
       }
-    } on FirebaseException catch (e) {
-      return false;
+    } on FirebaseException {
+      return {'success': false, 'error': UpdateError.firebaseError};
     }
-    return false;
+    return {'success': false, 'error': UpdateError.invalidAmount};
   }
 
-  Future<void> updateItemAddAmountInDB(String nameId, int amountToAdd) async {
+  Future<Map<String, dynamic>> updateItemAddAmountInDB(
+      String nameId, int amountToAdd) async {
     try {
       CollectionReference items =
           FirebaseFirestore.instance.collection('Items');
-
       QuerySnapshot querySnapshot =
           await items.where('Name', isEqualTo: nameId).get();
 
       for (QueryDocumentSnapshot doc in querySnapshot.docs) {
         Item currentItem =
             Item.fromFirestore(doc.data() as Map<String, dynamic>);
-
         int newAmount = currentItem.amount + amountToAdd;
         await doc.reference.update({
           'Amount': newAmount,
         });
         _updateStreamController.add(null);
       }
+      return {'success': true, 'error': UpdateError.none};
     } catch (e) {
-      print('Error updating item amount: $e');
+      return {'success': false, 'error': UpdateError.firebaseError};
     }
   }
 
-  Future<Item?> getItemFromDB(String itemName) async {
+  Future<Map<String, dynamic>> getItemFromDB(String itemName) async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('Items')
@@ -99,29 +102,32 @@ class ItemService {
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        return Item.fromFirestore(
-            querySnapshot.docs[0].data() as Map<String, dynamic>);
+        return {
+          'item': Item.fromFirestore(
+              querySnapshot.docs[0].data() as Map<String, dynamic>),
+          'error': UpdateError.none,
+        };
       } else {
-        return null;
+        return {'item': null, 'error': UpdateError.itemNotFound};
       }
     } catch (e) {
-      print('Error fetching item: $e');
-      return null;
+      return {'item': null, 'error': UpdateError.firebaseError};
     }
   }
 
-  Future<List<Item>> getAllItems() async {
+  Future<Map<String, dynamic>> getAllItems() async {
     try {
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
 
       QuerySnapshot querySnapshot =
           await FirebaseFirestore.instance.collection('Items').get();
-      return querySnapshot.docs
+      List<Item> items = querySnapshot.docs
           .map((doc) => Item.fromFirestore(doc.data() as Map<String, dynamic>))
           .toList();
+
+      return {'items': items, 'error': UpdateError.none};
     } catch (e) {
-      print('Error fetching items: $e');
-      return [];
+      return {'items': <Item>[], 'error': UpdateError.firebaseError};
     }
   }
 }

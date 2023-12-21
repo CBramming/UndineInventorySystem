@@ -5,6 +5,7 @@ import 'package:undineinventorysystem/screens/catalog_screen.dart';
 import 'package:undineinventorysystem/screens/detailed_view_screen.dart';
 import 'package:undineinventorysystem/screens/manual_get_item.dart';
 import 'package:undineinventorysystem/services/item_service.dart';
+import 'package:undineinventorysystem/utils/error_handler.dart';
 import 'package:undineinventorysystem/widgets/custom_widgets/person_dropdown_menu_widget.dart';
 import 'package:undineinventorysystem/widgets/qr_scanner_screen_widget/qr_scanner_widget.dart';
 
@@ -28,21 +29,19 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
   }
 
   void handleScanResult(Barcode result) async {
-    print('handleScanResult called with: ${result.code}'); // Debug print
-
     if (!isNavigating && result.code != null) {
       setState(() {
         isNavigating = true;
       });
 
       controller?.pauseCamera();
-      print('Scanned result: ${result.code}');
 
       ItemService itemService = ItemService();
-      Item? item = await itemService.getItemFromDB(result.code!);
+      var dbResult = await itemService.getItemFromDB(result.code!);
+      Item? item = dbResult['item'];
+      UpdateError error = dbResult['error'];
 
       if (item != null) {
-        print('Item found, navigating to detailed view.'); // Debug print
         // ignore: use_build_context_synchronously
         await Navigator.push(
           context,
@@ -54,7 +53,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
           ),
         );
       } else {
-        print('Item not found in database.'); // Debug print
+        ErrorHandler.handleError(error, context);
       }
 
       if (mounted) {
@@ -64,7 +63,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
         controller?.resumeCamera();
       }
     } else {
-      print('No result or isNavigating is true.'); // Debug print
+      print('No result or isNavigating is true.');
     }
   }
 
