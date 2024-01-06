@@ -41,12 +41,10 @@ An inventory management system built with Flutter and Dart that allows users to 
    ```bash
    cd inventory-management
 
-3.Install dependencies:
+3. Install dependencies
    ```bash
+   flutter pub get
 
-flutter pub get
-
-## Usage
 1. Ensure that you have Flutter and Dart installed on your machine.
 2. Run the app:
    ```bash
