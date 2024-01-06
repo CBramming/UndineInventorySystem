@@ -16,6 +16,7 @@ An inventory management system built with Flutter and Dart that allows users to 
 
 2. **Signup:**
    - New users can sign up for an account to use the system.
+     
 
 3. **QR Scan:**
    - Scan QR codes to quickly locate and identify specific items.
