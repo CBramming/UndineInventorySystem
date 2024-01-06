@@ -48,7 +48,7 @@ An inventory management system built with Flutter and Dart that allows users to 
 ## Usage
 1. Ensure that you have Flutter and Dart installed on your machine.
 2. Run the app:
-   ```bash
+```bash
    flutter run
 3. Follow the on-screen instructions to log in or sign up.
 4. Use the QR scan, manual search, and catalog features to manage your inventory.
