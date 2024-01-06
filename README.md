@@ -18,8 +18,8 @@ An inventory management system built with Flutter and Dart that allows users to 
 
 2. **Signup:**
    - New users can sign up for an account to use the system.
-     
-     ![signup](https://github.com/CBramming/UndineInventorySystem/assets/102149012/c682f53e-15e0-4197-b348-ad3f8475eb56)
+
+![signup](https://github.com/CBramming/UndineInventorySystem/assets/102149012/c682f53e-15e0-4197-b348-ad3f8475eb56)
 
 
 3. **QR Scanner:**
@@ -35,7 +35,7 @@ An inventory management system built with Flutter and Dart that allows users to 
 5. **Catalog:**
    - View a catalog of all items with a search function for easy navigation.
      
-     ![catalog](https://github.com/CBramming/UndineInventorySystem/assets/102149012/e663d48e-431c-47a9-898f-da47dd5f596a)
+![catalog](https://github.com/CBramming/UndineInventorySystem/assets/102149012/e663d48e-431c-47a9-898f-da47dd5f596a)
      
 6. **Item Details:**
    - Access detailed information about a specific item.
