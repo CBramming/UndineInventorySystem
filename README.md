@@ -44,7 +44,7 @@ An inventory management system built with Flutter and Dart that allows users to 
 3.Install dependencies:
   ```bash
   flutter pub get
-  
+  `` `
 ## Usage
 1. Ensure that you have Flutter and Dart installed on your machine.
 2. Run the app:
