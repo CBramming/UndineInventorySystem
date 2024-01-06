@@ -38,14 +38,17 @@ An inventory management system built with Flutter and Dart that allows users to 
    git clone https://github.com/your-username/inventory-management.git
 
 2. Navigate to the project directory:
+   ```bash
    cd inventory-management
 
 3.Install dependencies:
+  ```bash
   flutter pub get
   
 ## Usage
 1. Ensure that you have Flutter and Dart installed on your machine.
 2. Run the app:
+   ```bash
    flutter run
 3. Follow the on-screen instructions to log in or sign up.
 4. Use the QR scan, manual search, and catalog features to manage your inventory.
