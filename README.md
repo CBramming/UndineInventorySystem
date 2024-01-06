@@ -6,7 +6,6 @@ An inventory management system built with Flutter and Dart that allows users to 
 
 - [Features](#features)
 - [Usage](#usage)
-- [Documentation](#documentation)
 
 
 ## Features
