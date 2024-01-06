@@ -22,12 +22,12 @@ An inventory management system built with Flutter and Dart that allows users to 
      ![signup](https://github.com/CBramming/UndineInventorySystem/assets/102149012/c682f53e-15e0-4197-b348-ad3f8475eb56)
 
 
-3. **QR Scan:**
+3. **QR Scanner:**
    - Scan QR codes to quickly locate and identify specific items.
      
 ![qr scanner](https://github.com/CBramming/UndineInventorySystem/assets/102149012/e3b79d99-bf9d-4bc9-9482-a01b4abde17b)
 
-4. **Manual Search:**
+4. **Manual Input:**
    - Search for items manually using a search function.
      
 ![manuel input](https://github.com/CBramming/UndineInventorySystem/assets/102149012/57f6cf58-5d60-4a2c-a950-54ae6c262ee7)
@@ -48,11 +48,11 @@ An inventory management system built with Flutter and Dart that allows users to 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/inventory-management.git
+   git clone https://github.com/your-username/UndineInvetorySystem.git
 
 2. Navigate to the project directory:
    ```bash
-   cd inventory-management
+   cd UndineInvetorySystem
 
 3. Install dependencies
    ```bash
