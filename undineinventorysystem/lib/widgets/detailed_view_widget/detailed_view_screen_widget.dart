@@ -323,7 +323,9 @@ class ItemDescriptionButton extends StatelessWidget {
       onPressed: () => _showDescriptionDialog(context),
       style: TextButton.styleFrom(
         foregroundColor: Colors.blue,
+        alignment: Alignment.centerLeft,
       ),
+      // Adjust left padding as needed
       child: const Text(
         'Item Description',
         style: TextStyle(
