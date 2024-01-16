@@ -1,10 +1,12 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:undineinventorysystem/models/item.dart';
 import 'package:undineinventorysystem/utils/alert_dialog_utils.dart';
 import 'package:undineinventorysystem/utils/error_handler.dart';
 import 'dart:async';
-
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:undineinventorysystem/widgets/detailed_view_widget/detailed_view_screen_widget.dart';
 
 class ItemService {
@@ -15,16 +17,40 @@ class ItemService {
 
   Stream<void> get updateStream => _updateStreamController.stream;
 
-  Future<void> addItemToDB(String nameId, int amount) async {
-    try {
-      CollectionReference items = firestore.collection('Items');
+  Future<void> createItemToDB(
+    String nameId, int amount, String description, File imageUrl) async {
+  try {
+    CollectionReference items = firestore.collection('Items');
 
-      await items.add({
-        'something': nameId,
-        'amount2': amount,
-      });
+    // Upload the image to Firebase Storage and get the download URL
+    String downloadUrl = await uploadImageToStorage(imageUrl);
+
+    // Store the download URL in the Firestore database
+    await items.add({
+      'Name': nameId,
+      'Amount': amount,
+      'Description': description,
+      'imageUrl': downloadUrl,
+    });
+  } catch (e) {
+    print('Error creating item: $e');
+    throw e;
+  }
+}
+
+  Future<String> uploadImageToStorage(File image) async {
+    try {
+      String imageName = DateTime.now().millisecondsSinceEpoch.toString();
+      Reference storageReference =
+          FirebaseStorage.instance.ref().child('images/$imageName.jpg');
+
+      await storageReference.putFile(image);
+      String downloadUrl = await storageReference.getDownloadURL();
+
+      return downloadUrl;
     } catch (e) {
-      print('Error');
+      print('Error uploading image: $e');
+      throw e;
     }
   }
 
@@ -71,14 +97,18 @@ class ItemService {
     return {'success': false, 'error': UpdateError.invalidAmount};
   }
 
+  //This methods looks at the current amount of a specific item and adds an x amount.
   Future<Map<String, dynamic>> updateItemAddAmountInDB(
       String nameId, int amountToAdd) async {
     try {
+      //Looks at the collection "Items"
       CollectionReference items =
           FirebaseFirestore.instance.collection('Items');
+      //Looks at the field "Name" and compare to what is given in the parameter of nameId.
       QuerySnapshot querySnapshot =
           await items.where('Name', isEqualTo: nameId).get();
-
+      //This for loop creates a new int to hold the updated value. Then it looks at the currentAmount and adds the amountToAdd given in the parameter.
+      //Then it puts the updated value of newAmount as the value for the "Amount" field in the database for this specific item.
       for (QueryDocumentSnapshot doc in querySnapshot.docs) {
         Item currentItem =
             Item.fromFirestore(doc.data() as Map<String, dynamic>);
@@ -88,8 +118,10 @@ class ItemService {
         });
         _updateStreamController.add(null);
       }
+      //Returns true and gives no error if this try is succesfull.
       return {'success': true, 'error': UpdateError.none};
     } catch (e) {
+      //Returns false and gives an error if it is catched.
       return {'success': false, 'error': UpdateError.firebaseError};
     }
   }
