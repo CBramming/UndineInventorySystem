@@ -94,7 +94,7 @@ class CardGrid extends StatelessWidget {
         elevation: 5,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+          children: [ 
             Expanded(
               child: AspectRatio(
                 aspectRatio: 16 / 9,
@@ -202,3 +202,24 @@ class SearchBarWidget extends StatelessWidget {
     );
   }
 }
+
+class GoCreate extends StatelessWidget {
+  final VoidCallback onGoCreate;
+
+  const GoCreate({Key? key, required this.onGoCreate}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: onGoCreate,
+      child: const Text(
+        'Create here!',
+        style: TextStyle(
+          color: Color.fromARGB(255, 0, 102, 255),
+          fontSize: 14,
+          fontWeight: FontWeight.bold, // Add this line for bold text
+        ),
+      ),
+    );
+  }
+} 
