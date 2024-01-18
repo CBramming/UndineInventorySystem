@@ -9,6 +9,7 @@ import 'dart:async';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:undineinventorysystem/widgets/detailed_view_widget/detailed_view_screen_widget.dart';
 
+
 class ItemService {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 

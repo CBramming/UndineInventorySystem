@@ -1,66 +1,21 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:undineinventorysystem/models/item.dart';
 import 'package:undineinventorysystem/screens/detailed_view_screen.dart';
-import 'package:undineinventorysystem/services/item_service.dart';
-import 'package:undineinventorysystem/utils/error_handler.dart';
 
 class CardGrid extends StatelessWidget {
   final String searchString;
-  final List<Item> filteredItems;
+  final List<Item> items;
   final Function refreshCatalog;
 
   const CardGrid({
     super.key,
     required this.searchString,
-    required this.filteredItems,
+    required this.items,
     required this.refreshCatalog,
   });
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Map<String, dynamic>>(
-      future: ItemService().getAllItems(), // Updated to expect a Map
-      builder:
-          (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CupertinoActivityIndicator(
-            animating: true,
-            radius: 20,
-          );
-        }
-
-        if (snapshot.hasError) {
-          return Text('Error fetching items: ${snapshot.error}');
-        }
-
-        var result = snapshot.data;
-        List<Item> items = result?['items'] ?? [];
-        UpdateError error = result?['error'] ?? UpdateError.none;
-
-        if (error != UpdateError.none) {
-          ErrorHandler.handleError(error, context);
-          return const Text('Failed to load items.');
-        }
-
-        if (items.isEmpty) {
-          return const Text('No items found');
-        }
-
-        List<Item> filteredItems = searchString.isEmpty
-            ? items
-            : items.where((item) {
-                return item.name
-                    .toLowerCase()
-                    .contains(searchString.toLowerCase());
-              }).toList();
-
-        return buildGridView(filteredItems, context);
-      },
-    );
-  }
-
-  Widget buildGridView(List<Item> items, BuildContext context) {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,

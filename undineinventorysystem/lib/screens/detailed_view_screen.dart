@@ -99,7 +99,7 @@ class _DetailedItemViewState extends State<DetailedItemView> {
               const SizedBox(height: 20.0),
               Container(
                 padding: const EdgeInsets.only(
-                    left: 8.0), // Adjust the left padding as needed
+                    left: 8.0),
                 child: Text(
                   'Stock: ${widget.item.amount}',
                   style: const TextStyle(

@@ -16,8 +16,8 @@ class CatalogScreen extends StatefulWidget {
 class _CatalogScreenState extends State<CatalogScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchString = '';
-  late Future<Map<String, dynamic>> itemsFuture;
   List<Item> items = [];
+  late Future<List<Item>> itemsFuture;
 
   @override
   void initState() {
@@ -28,37 +28,77 @@ class _CatalogScreenState extends State<CatalogScreen> {
       });
     });
 
-    itemsFuture = ItemService().getAllItems();
+    itemsFuture = _fetchItems();
+  }
+
+  Future<List<Item>> _fetchItems() async {
+    try {
+      var result = await ItemService().getAllItems();
+      List<Item> items = List<Item>.from(result['items'] ?? []);
+      return items;
+    } catch (e) {
+      return [];
+    }
   }
 
   void refreshItems() {
     setState(() {
-      itemsFuture = ItemService().getAllItems();
+      itemsFuture = _fetchItems();
     });
+  }
+
+  List<Item> _filterItems(String searchString, List<Item> allItems) {
+    searchString = searchString.toLowerCase();
+    var filtered = allItems.where((item) {
+      bool nameMatch = item.name.toLowerCase().contains(searchString);
+      bool tagMatch =
+          item.tags.any((tag) => tag.toLowerCase().contains(searchString));
+      return nameMatch || tagMatch;
+    }).toList();
+    return filtered;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: FutureBuilder<List<Item>>(
+        future: itemsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          }
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Text('No items found');
+          }
+
+          List<Item> filteredItems =
+              _filterItems(_searchString, snapshot.data!);
+
+          return Column(
+            children: [
+              SearchBarWidget(
+                searchController: _searchController,
+                onSearchChanged: (searchText) {
+                  setState(() {
+                    _searchString = searchText;
+                  });
+                },
+              ),
+              Expanded(
+                child: CardGrid(
+                  searchString: _searchString,
+                  items: filteredItems,
+                  refreshCatalog: refreshItems,
+                ),
+              ),
+            ],
+          );
+        },
       body: Column(
         children: [
-          SearchBarWidget(
-            searchController: _searchController,
-            onSearchChanged: (searchText) {
-              setState(() {
-                _searchString = searchText;
-              });
-            },
-          ),
-          Expanded(
-            child: CardGrid(
-              searchString: _searchString,
-              filteredItems: items
-                  .where((item) => item.name.contains(_searchString))
-                  .toList(),
-              refreshCatalog: refreshItems,
-            ),
-          ),
           GoCreate(
                 onGoCreate: () {
                   Navigator.push(
@@ -68,8 +108,9 @@ class _CatalogScreenState extends State<CatalogScreen> {
                 },
               ),
         ],
+
       ),
-      
+     
     );
   }
 
