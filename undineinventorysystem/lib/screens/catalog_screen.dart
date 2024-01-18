@@ -61,57 +61,50 @@ class _CatalogScreenState extends State<CatalogScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<List<Item>>(
-        future: itemsFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
-          }
-          if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          }
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Text('No items found');
-          }
+        body: FutureBuilder<List<Item>>(
+      future: itemsFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        }
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Text('No items found');
+        }
 
-          List<Item> filteredItems =
-              _filterItems(_searchString, snapshot.data!);
+        List<Item> filteredItems = _filterItems(_searchString, snapshot.data!);
 
-          return Column(
-            children: [
-              SearchBarWidget(
-                searchController: _searchController,
-                onSearchChanged: (searchText) {
-                  setState(() {
-                    _searchString = searchText;
-                  });
-                },
+        return Column(
+          children: [
+            SearchBarWidget(
+              searchController: _searchController,
+              onSearchChanged: (searchText) {
+                setState(() {
+                  _searchString = searchText;
+                });
+              },
+            ),
+            Expanded(
+              child: CardGrid(
+                searchString: _searchString,
+                items: filteredItems,
+                refreshCatalog: refreshItems,
               ),
-              Expanded(
-                child: CardGrid(
-                  searchString: _searchString,
-                  items: filteredItems,
-                  refreshCatalog: refreshItems,
-                ),
-              ),
-            ],
-          );
-        },
-      body: Column(
-        children: [
-          GoCreate(
-                onGoCreate: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CreateScreen()));
-                },
-              ),
-        ],
-
-      ),
-     
-    );
+            ),
+            GoCreate(
+              onGoCreate: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CreateScreen()));
+              },
+            ),
+          ],
+        );
+      },
+    ));
   }
 
   @override
