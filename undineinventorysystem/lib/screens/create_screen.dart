@@ -15,6 +15,7 @@ class _CreateScreenState extends State<CreateScreen> {
   final nameController = TextEditingController();
   final amountController = TextEditingController();
   final descriptionController = TextEditingController();
+  final tagController = TextEditingController();
   final ItemService _itemService = ItemService();
   File? _selectedImage;
   final ImagePicker _imagePicker = ImagePicker();
@@ -30,7 +31,7 @@ class _CreateScreenState extends State<CreateScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              const SizedBox(height: 200),
+              const SizedBox(height: 150),
               const CreateTitle(),
               const SizedBox(height: 20),
               NameInputField(controller: nameController),
@@ -39,10 +40,12 @@ class _CreateScreenState extends State<CreateScreen> {
               const SizedBox(height: 20),
               DescriptionInputField(controller: descriptionController),
               const SizedBox(height: 20),
+              TagInputField(controller: tagController),
+              const SizedBox(height: 20),
               _buildImageField(),
               const SizedBox(height: 20),
               CreateButton(onCreate: () => CreateItem(context)),
-              const SizedBox(height: 50),
+              const SizedBox(height: 20),
               CancelButton(
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -74,7 +77,8 @@ class _CreateScreenState extends State<CreateScreen> {
                 child: IconButton(
                   icon: Icon(
                     Icons.camera_alt,
-                    color: const Color.fromARGB(218, 1, 15, 58), // Set the desired color here
+                    color: const Color.fromARGB(
+                        218, 1, 15, 58), // Set the desired color here
                   ),
                   onPressed: _takePicture,
                 ),
@@ -99,13 +103,14 @@ class _CreateScreenState extends State<CreateScreen> {
       String name = nameController.text.trim();
       int amount = int.tryParse(amountController.text.trim()) ?? 0;
       String description = descriptionController.text.trim();
+      String tag = tagController.text.trim();
 
       if (name.isEmpty || amount <= 0 || description.isEmpty) {
         return;
       }
 
       await _itemService.createItemToDB(
-          name, amount, description, _selectedImage!);
+          name, amount, description, tag, _selectedImage!);
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -119,7 +124,7 @@ class _CreateScreenState extends State<CreateScreen> {
       print('Error creating item: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error creating item'),
+          content: Text(e.toString()), // Display the error message
           duration: Duration(seconds: 2),
         ),
       );
