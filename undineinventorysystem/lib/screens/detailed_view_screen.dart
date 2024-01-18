@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:undineinventorysystem/models/item.dart';
+import 'package:undineinventorysystem/screens/bom_screen.dart';
 import 'package:undineinventorysystem/utils/error_handler.dart';
 import 'package:undineinventorysystem/widgets/detailed_view_widget/detailed_view_screen_widget.dart';
 import '../services/item_service.dart';
@@ -114,6 +115,19 @@ class _DetailedItemViewState extends State<DetailedItemView> {
                   children: [_buildCounterRow()]),
               const SizedBox(height: 20.0),
               _buildActionButtons(),
+              const SizedBox(height: 30),
+              Center(
+                child: GoBOM(
+                  onGoBOM: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>  BOMScreen(item: widget.item),
+                      ),
+                    );
+                  },
+                ),
+              )
             ],
           ),
         ),

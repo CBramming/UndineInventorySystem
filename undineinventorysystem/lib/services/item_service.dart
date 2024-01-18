@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class ItemService {
   Stream<void> get updateStream => _updateStreamController.stream;
 
   Future<void> createItemToDB(
-    String nameId, int amount, String description, File imageUrl) async {
+    String nameId, int amount, String description, String tag, File imageUrl) async {
   try {
     CollectionReference items = firestore.collection('Items');
 
@@ -30,6 +31,7 @@ class ItemService {
       'Name': nameId,
       'Amount': amount,
       'Description': description,
+      'tags': tag,
       'imageUrl': downloadUrl,
     });
   } catch (e) {

@@ -118,6 +118,41 @@ class DescriptionInputField extends StatelessWidget {
   }
 }
 
+class TagInputField extends StatelessWidget {
+  final TextEditingController controller;
+
+  const TagInputField({super.key, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    const Color borderColor = Color.fromARGB(255, 0, 0, 0);
+
+    return TextFormField(
+      controller: controller,
+      cursorColor: borderColor,
+      style: const TextStyle(color: borderColor),
+      decoration: const InputDecoration(
+        labelText: 'Tag',
+        labelStyle: TextStyle(
+            color: borderColor, fontSize: 16, fontWeight: FontWeight.w500),
+        suffixIcon: Icon(Icons.tag , color: borderColor),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            width: 1,
+            color: borderColor,
+          ),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            width: 2,
+            color: borderColor,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class CreateButton extends StatelessWidget {
   final VoidCallback onCreate;
 

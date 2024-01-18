@@ -335,3 +335,28 @@ class ItemDescriptionButton extends StatelessWidget {
     );
   }
 }
+
+class GoBOM extends StatelessWidget {
+  final VoidCallback onGoBOM;
+
+  const GoBOM({Key? key, required this.onGoBOM}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: onGoBOM,
+    style: ElevatedButton.styleFrom(
+          elevation: 5,
+          backgroundColor: const Color.fromARGB(218, 1, 15, 58),
+          padding: const EdgeInsets.symmetric(vertical: 5.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        ),
+        child: const Text(
+          'Go to the recipe for: ',
+          style: TextStyle(fontSize: 18, color: Colors.white),
+        ),
+      );
+  }
+} 
