@@ -5,8 +5,6 @@ import 'package:undineinventorysystem/utils/alert_dialog_utils.dart';
 import 'package:undineinventorysystem/utils/error_handler.dart';
 import 'dart:async';
 
-import 'package:undineinventorysystem/widgets/detailed_view_widget/detailed_view_screen_widget.dart';
-
 class ItemService {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
