@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:undineinventorysystem/models/item.dart';
+import 'package:undineinventorysystem/screens/create_screen.dart';
 import 'package:undineinventorysystem/services/item_service.dart';
 import 'package:undineinventorysystem/widgets/catalog_widgets/catalog_widgets.dart';
 
@@ -96,7 +97,20 @@ class _CatalogScreenState extends State<CatalogScreen> {
             ],
           );
         },
+      body: Column(
+        children: [
+          GoCreate(
+                onGoCreate: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CreateScreen()));
+                },
+              ),
+        ],
+
       ),
+     
     );
   }
 
