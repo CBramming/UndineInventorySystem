@@ -18,33 +18,38 @@ class ItemService {
 
   Stream<void> get updateStream => _updateStreamController.stream;
 
-  Future<void> createItemToDB(
-    String nameId, int amount, String description, String tag, File imageUrl) async {
-  try {
-    CollectionReference items = firestore.collection('Items');
+  Future<void> createItemToDB(String nameId, int amount, String description,
+      String tag, File imageUrl) async {
+    try {
+      // Check if nameId and amount are provided
+      if (nameId.isEmpty || amount <= 0) {
+        throw 'Name and amount are required';
+      }
 
-    // Check if an item with the same name already exists
-    var item = await items.where('Name', isEqualTo: nameId).get();
-    if (item.docs.isNotEmpty) {
-      throw 'Item with the same name already exists';
+      CollectionReference items = firestore.collection('Items');
+
+      // Check if an item with the same name already exists
+      var item = await items.where('Name', isEqualTo: nameId).get();
+      if (item.docs.isNotEmpty) {
+        throw 'Item with the same name already exists';
+      }
+
+      // Upload the image to Firebase Storage and get the download URL
+      String downloadUrl = await uploadImageToStorage(imageUrl);
+
+      // Store the download URL in the Firestore database
+      await items.add({
+        'Name': nameId,
+        'Amount': amount,
+        'Description': description,
+        'tags': tag,
+        'imageUrl': downloadUrl,
+      });
+    } catch (e) {
+      print('Error creating item: $e');
+      throw e;
     }
-
-    // Upload the image to Firebase Storage and get the download URL
-    String downloadUrl = await uploadImageToStorage(imageUrl);
-
-    // Store the download URL in the Firestore database
-    await items.add({
-      'Name': nameId,
-      'Amount': amount,
-      'Description': description,
-      'tags': tag,
-      'imageUrl': downloadUrl,
-    });
-  } catch (e) {
-    print('Error creating item: $e');
-    throw e;
   }
-}
 
   Future<String> uploadImageToStorage(File image) async {
     try {

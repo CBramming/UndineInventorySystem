@@ -77,7 +77,8 @@ class _CreateScreenState extends State<CreateScreen> {
                 child: IconButton(
                   icon: Icon(
                     Icons.camera_alt,
-                    color: const Color.fromARGB(218, 1, 15, 58), // Set the desired color here
+                    color: const Color.fromARGB(
+                        218, 1, 15, 58), // Set the desired color here
                   ),
                   onPressed: _takePicture,
                 ),
@@ -123,7 +124,7 @@ class _CreateScreenState extends State<CreateScreen> {
       print('Error creating item: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error creating item'),
+          content: Text(e.toString()), // Display the error message
           duration: Duration(seconds: 2),
         ),
       );
