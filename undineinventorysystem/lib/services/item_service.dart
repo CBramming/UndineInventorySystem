@@ -23,6 +23,12 @@ class ItemService {
   try {
     CollectionReference items = firestore.collection('Items');
 
+    // Check if an item with the same name already exists
+    var item = await items.where('Name', isEqualTo: nameId).get();
+    if (item.docs.isNotEmpty) {
+      throw 'Item with the same name already exists';
+    }
+
     // Upload the image to Firebase Storage and get the download URL
     String downloadUrl = await uploadImageToStorage(imageUrl);
 
