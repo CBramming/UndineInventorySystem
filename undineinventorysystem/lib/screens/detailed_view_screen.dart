@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:undineinventorysystem/models/item.dart';
+import 'package:undineinventorysystem/models/recipe.dart';
 import 'package:undineinventorysystem/screens/bom_screen.dart';
 import 'package:undineinventorysystem/utils/error_handler.dart';
 import 'package:undineinventorysystem/widgets/detailed_view_widget/detailed_view_screen_widget.dart';
@@ -8,13 +9,17 @@ import '../services/item_service.dart';
 
 class DetailedItemView extends StatefulWidget {
   final Item item;
+  final Recipe? recipe;
   final Function(int) onAmountChanged;
 
-  const DetailedItemView({
+ const DetailedItemView({
     Key? key,
     required this.item,
+    this.recipe,
     required this.onAmountChanged,
   }) : super(key: key);
+
+
 
   @override
   _DetailedItemViewState createState() => _DetailedItemViewState();
@@ -122,12 +127,13 @@ class _DetailedItemViewState extends State<DetailedItemView> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>  BOMScreen(item: widget.item),
+                        builder: (context) =>  BOMSelectionScreen(item: widget.item),
                       ),
                     );
                   },
                 ),
-              )
+              ),
+              //CardGridForAnItem(futureItems: _itemService.getItemsForRecipe(widget.recipe)),
             ],
           ),
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:undineinventorysystem/models/item.dart';
 import 'package:undineinventorysystem/widgets/custom_widgets/expandable_text_widget.dart';
+import 'package:undineinventorysystem/screens/detailed_view_screen.dart';
 
 // Not used currently
 class DetailedViewItemName extends StatelessWidget {
@@ -348,15 +349,100 @@ class GoBOM extends StatelessWidget {
     style: ElevatedButton.styleFrom(
           elevation: 5,
           backgroundColor: const Color.fromARGB(218, 1, 15, 58),
-          padding: const EdgeInsets.symmetric(vertical: 5.0),
+          padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
           ),
         ),
         child: const Text(
-          'Go to the recipe for: ',
+          'Add to BOM',
           style: TextStyle(fontSize: 18, color: Colors.white),
         ),
       );
   }
 } 
+
+
+
+class CardGridForAnItem extends StatelessWidget {
+  final Future<List<Item>> futureItems; // Updated to Future<List<Item>>
+
+  const CardGridForAnItem({
+    Key? key,
+    required this.futureItems, // Pass the Future<List<Item>> as a parameter
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<Item>>(
+      future: futureItems,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          List<Item> items = snapshot.data ?? [];
+          return GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemCount: items.length,
+            itemBuilder: (BuildContext context, int index) {
+              return buildCard(context, items[index]);
+            },
+          );
+        }
+      },
+    );
+  }
+
+  Widget buildCard(BuildContext context, Item item) {
+    return InkWell(
+      onTap: () async {
+        await Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => DetailedItemView(
+              item: item,
+              onAmountChanged: (int) {},
+            ),
+          ),
+        );
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+        ),
+        elevation: 5,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.name,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Text('x${item.amount}'),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

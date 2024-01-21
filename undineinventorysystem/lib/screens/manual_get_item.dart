@@ -51,7 +51,7 @@ class ManuelGetItem extends StatelessWidget {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => DetailedItemView(
             item: item,
-            onAmountChanged: (int) {},
+            onAmountChanged: (int) {}, 
           ),
         ));
       } else {

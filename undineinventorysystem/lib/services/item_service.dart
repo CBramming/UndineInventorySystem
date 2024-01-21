@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:undineinventorysystem/models/item.dart';
+import 'package:undineinventorysystem/models/recipe.dart';
 import 'package:undineinventorysystem/utils/alert_dialog_utils.dart';
 import 'package:undineinventorysystem/utils/error_handler.dart';
 import 'dart:async';
@@ -176,4 +177,30 @@ class ItemService {
       return {'items': <Item>[], 'error': UpdateError.firebaseError};
     }
   }
+
+  Future<List<Item>> getItemsForRecipe(Recipe? recipe) async {
+  if (recipe == null) {
+    // Handle the case where recipe is null, return an empty list or handle as needed
+    return [];
+  }
+
+  List<Item> items = [];
+
+  for (int i = 0; i < recipe.itemIds.length; i++) {
+    String itemId = recipe.itemIds[i];
+    DocumentSnapshot itemSnapshot =
+        await firestore.collection('Items').doc(itemId).get();
+
+    if (itemSnapshot.exists) {
+      Item item = Item.fromFirestore(itemSnapshot.data() as Map<String, dynamic>);
+      items.add(item);
+    }
+  }
+
+  return items;
 }
+
+}
+
+
+
