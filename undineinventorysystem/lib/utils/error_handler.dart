@@ -7,6 +7,8 @@ enum UpdateError {
   invalidAmount,
   userCancelled,
   itemNotFound,
+  categoryNotFound,
+  invalidData,
 }
 
 class ErrorHandler {
@@ -37,6 +39,18 @@ class ErrorHandler {
         break;
 
       case UpdateError.userCancelled:
+        break;
+
+      case UpdateError.categoryNotFound:
+        AlertDialogUtils.showDeleteConfirmationDialog(context,
+            title: "Category Not Found",
+            message: "Category is not found. Check if it exists in database.");
+        break;
+
+      case UpdateError.invalidData:
+        AlertDialogUtils.showDeleteConfirmationDialog(context,
+            title: "Invalid Data",
+            message: "Data is invalid. Data is not a list.");
         break;
 
       case UpdateError.none:

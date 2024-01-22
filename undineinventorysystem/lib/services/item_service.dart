@@ -1,15 +1,11 @@
-import 'dart:ffi';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:undineinventorysystem/models/item.dart';
 import 'package:undineinventorysystem/utils/alert_dialog_utils.dart';
 import 'package:undineinventorysystem/utils/error_handler.dart';
 import 'dart:async';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:undineinventorysystem/widgets/detailed_view_widget/detailed_view_screen_widget.dart';
-
 
 class ItemService {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -140,17 +136,17 @@ class ItemService {
     }
   }
 
-  Future<Map<String, dynamic>> getItemFromDB(String itemName) async {
+  Future<Map<String, dynamic>> getItemFromDB(String itemId) async {
     try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
           .collection('Items')
-          .where('Name', isEqualTo: itemName)
+          .doc(itemId)
           .get();
 
-      if (querySnapshot.docs.isNotEmpty) {
+      if (documentSnapshot.exists) {
         return {
           'item': Item.fromFirestore(
-              querySnapshot.docs[0].data() as Map<String, dynamic>),
+              documentSnapshot.data() as Map<String, dynamic>),
           'error': UpdateError.none,
         };
       } else {
