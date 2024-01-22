@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:undineinventorysystem/models/item.dart';
 import 'package:undineinventorysystem/screens/create_screen.dart';
 import 'package:undineinventorysystem/services/item_service.dart';
+import 'package:undineinventorysystem/services/category_service.dart';
+import 'package:undineinventorysystem/utils/error_handler.dart';
 import 'package:undineinventorysystem/widgets/catalog_widgets/catalog_widgets.dart';
 
 class CatalogScreen extends StatefulWidget {
@@ -14,6 +16,7 @@ class CatalogScreen extends StatefulWidget {
 }
 
 class _CatalogScreenState extends State<CatalogScreen> {
+  final CategoryService categoryService = CategoryService();
   final TextEditingController _searchController = TextEditingController();
   String _searchString = '';
   List<Item> items = [];
@@ -58,6 +61,52 @@ class _CatalogScreenState extends State<CatalogScreen> {
     return filtered;
   }
 
+  void _showCategoryList(BuildContext context) async {
+    Map<String, dynamic> result = await categoryService.getAllCategories();
+
+    if (result['error'] == UpdateError.none) {
+      // ignore: use_build_context_synchronously
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          List<String> categories = result['categories'];
+          return ListView.builder(
+            itemCount: categories.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ListTile(
+                title: Text(categories[index]),
+                onTap: () {
+                  Navigator.pop(context);
+                  onCategorySelected(context, categories[index]);
+                },
+              );
+            },
+          );
+        },
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error fetching categories')),
+      );
+    }
+  }
+
+  void onCategorySelected(BuildContext context, String categoryName) async {
+    var categoryItemsResult =
+        await categoryService.getItemsByCategory(categoryName);
+
+    if (categoryItemsResult['error'] == UpdateError.none) {
+      setState(() {
+        // Replace itemsFuture with a future that completes with the new items list
+        itemsFuture = Future.value(categoryItemsResult['items']);
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error fetching items for the category')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,6 +135,11 @@ class _CatalogScreenState extends State<CatalogScreen> {
                 });
               },
             ),
+            const SizedBox(height: 5),
+            CategorySearchButton(
+              onCategorySearch: () => _showCategoryList(context),
+            ),
+            const SizedBox(height: 10),
             Expanded(
               child: CardGrid(
                 searchString: _searchString,

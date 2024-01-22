@@ -49,7 +49,7 @@ class CardGrid extends StatelessWidget {
         elevation: 5,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [ 
+          children: [
             Expanded(
               child: AspectRatio(
                 aspectRatio: 16 / 9,
@@ -172,9 +172,38 @@ class GoCreate extends StatelessWidget {
         style: TextStyle(
           color: Color.fromARGB(255, 0, 102, 255),
           fontSize: 14,
-          fontWeight: FontWeight.bold, // Add this line for bold text
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
   }
-} 
+}
+
+class CategorySearchButton extends StatelessWidget {
+  final VoidCallback onCategorySearch;
+
+  const CategorySearchButton({super.key, required this.onCategorySearch});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 400,
+      height: 35,
+      child: ElevatedButton(
+        onPressed: onCategorySearch,
+        style: ElevatedButton.styleFrom(
+          elevation: 5,
+          backgroundColor: const Color.fromARGB(218, 1, 15, 58),
+          padding: const EdgeInsets.symmetric(vertical: 5.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        ),
+        child: const Text(
+          'Search Categories',
+          style: TextStyle(fontSize: 16, color: Colors.white),
+        ),
+      ),
+    );
+  }
+}
