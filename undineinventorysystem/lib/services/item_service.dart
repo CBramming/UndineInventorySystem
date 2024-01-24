@@ -154,6 +154,27 @@ class ItemService {
     }
   }
 
+   Future<Map<String, dynamic>> getItemFromDBNameField(String itemName) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('Items')
+          .where('Name', isEqualTo: itemName)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        return {
+          'item': Item.fromFirestore(
+              querySnapshot.docs[0].data() as Map<String, dynamic>),
+          'error': UpdateError.none,
+        };
+      } else {
+        return {'item': null, 'error': UpdateError.itemNotFound};
+      }
+    } catch (e) {
+      return {'item': null, 'error': UpdateError.firebaseError};
+    }
+  }
+
   Future<Map<String, dynamic>> getAllItems() async {
     try {
       await Future.delayed(const Duration(seconds: 1));
