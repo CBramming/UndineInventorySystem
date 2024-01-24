@@ -48,7 +48,7 @@ class _CreateScreenState extends State<CreateScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CreateButton(onCreate: () => CreateItem(context)),
+                    CreateButton(onCreate: () => createItem(context)),
                     const SizedBox(width: 35),
                     CancelButton(
                       onPressed: () {
@@ -105,7 +105,7 @@ class _CreateScreenState extends State<CreateScreen> {
     }
   }
 
-  void CreateItem(BuildContext context) async {
+  void createItem(BuildContext context) async {
     try {
       String name = nameController.text.trim();
       int amount = int.tryParse(amountController.text.trim()) ?? 0;

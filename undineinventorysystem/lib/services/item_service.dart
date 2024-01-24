@@ -19,23 +19,19 @@ class ItemService {
   Future<void> createItemToDB(String nameId, int amount, String description,
       String tag, File imageUrl) async {
     try {
-      // Check if nameId and amount are provided
       if (nameId.isEmpty || amount <= 0) {
         throw 'Name and amount are required';
       }
 
       CollectionReference items = firestore.collection('Items');
 
-      // Check if an item with the same name already exists
       var item = await items.where('Name', isEqualTo: nameId).get();
       if (item.docs.isNotEmpty) {
         throw 'Item with the same name already exists';
       }
 
-      // Upload the image to Firebase Storage and get the download URL
       String downloadUrl = await uploadImageToStorage(imageUrl);
 
-      // Store the download URL in the Firestore database
       await items.add({
         'Name': nameId,
         'Amount': amount,
