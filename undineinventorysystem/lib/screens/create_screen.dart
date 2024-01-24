@@ -43,13 +43,20 @@ class _CreateScreenState extends State<CreateScreen> {
               TagInputField(controller: tagController),
               const SizedBox(height: 20),
               _buildImageField(),
-              const SizedBox(height: 20),
-              CreateButton(onCreate: () => CreateItem(context)),
-              const SizedBox(height: 20),
-              CancelButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+              const SizedBox(height: 55),
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CreateButton(onCreate: () => CreateItem(context)),
+                    const SizedBox(width: 35),
+                    CancelButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
               )
             ],
           ),

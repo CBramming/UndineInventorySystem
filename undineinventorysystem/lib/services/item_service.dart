@@ -175,28 +175,25 @@ class ItemService {
   }
 
   Future<List<Item>> getItemsForRecipe(Recipe? recipe) async {
-  if (recipe == null) {
-    // Handle the case where recipe is null, return an empty list or handle as needed
-    return [];
-  }
-
-  List<Item> items = [];
-
-  for (int i = 0; i < recipe.itemIds.length; i++) {
-    String itemId = recipe.itemIds[i];
-    DocumentSnapshot itemSnapshot =
-        await firestore.collection('Items').doc(itemId).get();
-
-    if (itemSnapshot.exists) {
-      Item item = Item.fromFirestore(itemSnapshot.data() as Map<String, dynamic>);
-      items.add(item);
+    if (recipe == null) {
+      // Handle the case where recipe is null, return an empty list or handle as needed
+      return [];
     }
+
+    List<Item> items = [];
+
+    for (int i = 0; i < recipe.itemIds.length; i++) {
+      String itemId = recipe.itemIds[i];
+      DocumentSnapshot itemSnapshot =
+          await firestore.collection('Items').doc(itemId).get();
+
+      if (itemSnapshot.exists) {
+        Item item =
+            Item.fromFirestore(itemSnapshot.data() as Map<String, dynamic>);
+        items.add(item);
+      }
+    }
+
+    return items;
   }
-
-  return items;
 }
-
-}
-
-
-

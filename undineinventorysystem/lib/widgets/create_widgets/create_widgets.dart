@@ -135,7 +135,7 @@ class TagInputField extends StatelessWidget {
         labelText: 'Tag',
         labelStyle: TextStyle(
             color: borderColor, fontSize: 16, fontWeight: FontWeight.w500),
-        suffixIcon: Icon(Icons.tag , color: borderColor),
+        suffixIcon: Icon(Icons.tag, color: borderColor),
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             width: 1,
@@ -189,12 +189,24 @@ class CancelButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      child: Text('Cancel'),
+    return SizedBox(
+      width: 150,
+      height: 50,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          elevation: 5,
+          backgroundColor: Color.fromARGB(255, 255, 255, 255),
+          padding: const EdgeInsets.symmetric(vertical: 5.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        ),
+        onPressed: onPressed,
+        child: const Text(
+          'Cancel',
+          style: TextStyle(fontSize: 18, color: Color.fromARGB(218, 1, 15, 58)),
+        ),
+      ),
     );
   }
 }
-
-
-

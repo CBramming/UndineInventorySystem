@@ -346,23 +346,21 @@ class GoBOM extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: onGoBOM,
-    style: ElevatedButton.styleFrom(
-          elevation: 5,
-          backgroundColor: const Color.fromARGB(218, 1, 15, 58),
-          padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
-          ),
+      style: ElevatedButton.styleFrom(
+        elevation: 5,
+        backgroundColor: const Color.fromARGB(218, 1, 15, 58),
+        padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
         ),
-        child: const Text(
-          'Add to BOM',
-          style: TextStyle(fontSize: 18, color: Colors.white),
-        ),
-      );
+      ),
+      child: const Text(
+        'Add to BOM',
+        style: TextStyle(fontSize: 18, color: Colors.white),
+      ),
+    );
   }
-} 
-
-
+}
 
 class CardGridForAnItem extends StatelessWidget {
   final Future<List<Item>> futureItems; // Updated to Future<List<Item>>
@@ -383,16 +381,22 @@ class CardGridForAnItem extends StatelessWidget {
           return Text('Error: ${snapshot.error}');
         } else {
           List<Item> items = snapshot.data ?? [];
-          return GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
+          if (items.isEmpty) {
+            // Handle empty data state
+            return Center(child: Text('No items available'));
+          }
+          return Expanded(
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              itemCount: items.length,
+              itemBuilder: (BuildContext context, int index) {
+                return buildCard(context, items[index]);
+              },
             ),
-            itemCount: items.length,
-            itemBuilder: (BuildContext context, int index) {
-              return buildCard(context, items[index]);
-            },
           );
         }
       },

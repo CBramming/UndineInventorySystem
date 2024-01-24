@@ -121,7 +121,7 @@ class _DetailedItemViewState extends State<DetailedItemView> {
               const SizedBox(height: 20.0),
               _buildActionButtons(),
               const SizedBox(height: 30),
-              Center(
+              /*Center(
                 child: GoBOM(
                   onGoBOM: () {
                     Navigator.push(
@@ -132,8 +132,8 @@ class _DetailedItemViewState extends State<DetailedItemView> {
                     );
                   },
                 ),
-              ),
-              //CardGridForAnItem(futureItems: _itemService.getItemsForRecipe(widget.recipe)),
+              )
+              CardGridForAnItem(futureItems: _itemService.getItemsForRecipe(widget.recipe)),*/
             ],
           ),
         ),

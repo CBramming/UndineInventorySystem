@@ -109,15 +109,12 @@ class CardGridWithPopUp extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                // Get the entered amount
-                String enteredAmount = ''; // Use the TextEditingController to get the entered amount
+                String enteredAmount = ''; 
 
-                // Do something with the entered amount, e.g., update the item
-                // You can replace the following line with the logic you need
                 print('Entered amount: $enteredAmount for item: ${item.name}');
 
-                Navigator.of(context).pop(); // Close the dialog
-                refreshCatalog(); // Refresh the catalog as needed
+                Navigator.of(context).pop();
+                refreshCatalog();
               },
               child: Text('OK'),
             ),
