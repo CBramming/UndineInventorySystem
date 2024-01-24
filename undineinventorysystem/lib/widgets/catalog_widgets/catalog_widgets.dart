@@ -170,7 +170,7 @@ class GoCreate extends StatelessWidget {
       child: const Text(
         'Create here!',
         style: TextStyle(
-          color: Color.fromARGB(255, 0, 102, 255),
+          color: Color.fromARGB(218, 1, 15, 58),
           fontSize: 14,
           fontWeight: FontWeight.bold,
         ),
