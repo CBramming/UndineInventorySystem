@@ -68,23 +68,39 @@ class _CatalogScreenState extends State<CatalogScreen> {
       // ignore: use_build_context_synchronously
       showModalBottomSheet(
         context: context,
+        backgroundColor: Colors.white,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        elevation: 5.0,
         builder: (BuildContext context) {
           List<String> categories = result['categories'];
-          return ListView.builder(
-            itemCount: categories.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                title: Text(categories[index]),
-                onTap: () {
-                  Navigator.pop(context);
-                  onCategorySelected(context, categories[index]);
-                },
-              );
-            },
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ListView.separated(
+              itemCount: categories.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  title: Text(
+                    categories[index],
+                    style: const TextStyle(
+                      color: Colors.black87,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    onCategorySelected(context, categories[index]);
+                  },
+                );
+              },
+              separatorBuilder: (context, index) => const Divider(),
+            ),
           );
         },
       );
     } else {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error fetching categories')),
       );
@@ -97,12 +113,12 @@ class _CatalogScreenState extends State<CatalogScreen> {
 
     if (categoryItemsResult['error'] == UpdateError.none) {
       setState(() {
-        // Replace itemsFuture with a future that completes with the new items list
         itemsFuture = Future.value(categoryItemsResult['items']);
       });
     } else {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error fetching items for the category')),
+        const SnackBar(content: Text('Error fetching items for the category')),
       );
     }
   }
@@ -114,7 +130,14 @@ class _CatalogScreenState extends State<CatalogScreen> {
       future: itemsFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return const Center(
+            child: CircularProgressIndicator(
+              valueColor:
+                  AlwaysStoppedAnimation<Color>(Color.fromARGB(218, 1, 15, 58)),
+              strokeWidth: 5,
+              strokeAlign: 10,
+            ),
+          );
         }
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');

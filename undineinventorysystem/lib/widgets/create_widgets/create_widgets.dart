@@ -97,7 +97,7 @@ class DescriptionInputField extends StatelessWidget {
       cursorColor: borderColor,
       style: const TextStyle(color: borderColor),
       decoration: const InputDecoration(
-        labelText: 'Decsription',
+        labelText: 'Description',
         labelStyle: TextStyle(
             color: borderColor, fontSize: 16, fontWeight: FontWeight.w500),
         suffixIcon: Icon(Icons.description, color: borderColor),
