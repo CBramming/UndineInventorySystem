@@ -177,7 +177,7 @@ class ItemService {
 
   Future<Map<String, dynamic>> getAllItems() async {
     try {
-      await Future.delayed(const Duration(seconds: 1));
+      //await Future.delayed(const Duration(seconds: 1));
 
       QuerySnapshot querySnapshot =
           await FirebaseFirestore.instance.collection('Items').get();
