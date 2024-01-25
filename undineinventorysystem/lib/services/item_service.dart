@@ -19,14 +19,12 @@ class ItemService {
   Future<void> createItemToDB(String nameId, int amount, String description,
       String tag, File imageUrl) async {
     try {
-      // Check if nameId and amount are provided
       if (nameId.isEmpty || amount <= 0) {
         throw 'Name and amount are required';
       }
 
       CollectionReference items = firestore.collection('Items');
 
-      // Check if an item with the same name already exists
       var item = await items.where('Name', isEqualTo: nameId).get();
       if (item.docs.isNotEmpty) {
         throw 'Item with the same name already exists';
@@ -146,6 +144,27 @@ class ItemService {
         return {
           'item': Item.fromFirestore(
               documentSnapshot.data() as Map<String, dynamic>),
+          'error': UpdateError.none,
+        };
+      } else {
+        return {'item': null, 'error': UpdateError.itemNotFound};
+      }
+    } catch (e) {
+      return {'item': null, 'error': UpdateError.firebaseError};
+    }
+  }
+
+   Future<Map<String, dynamic>> getItemFromDBNameField(String itemName) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('Items')
+          .where('Name', isEqualTo: itemName)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        return {
+          'item': Item.fromFirestore(
+              querySnapshot.docs[0].data() as Map<String, dynamic>),
           'error': UpdateError.none,
         };
       } else {

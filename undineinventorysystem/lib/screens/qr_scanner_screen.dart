@@ -37,7 +37,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
       controller?.pauseCamera();
 
       ItemService itemService = ItemService();
-      var dbResult = await itemService.getItemFromDB(result.code!);
+      var dbResult = await itemService.getItemFromDBNameField(result.code!);
       Item? item = dbResult['item'];
       UpdateError error = dbResult['error'];
 
