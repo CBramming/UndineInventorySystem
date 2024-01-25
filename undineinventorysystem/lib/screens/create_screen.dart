@@ -84,8 +84,7 @@ class _CreateScreenState extends State<CreateScreen> {
                 child: IconButton(
                   icon: Icon(
                     Icons.camera_alt,
-                    color: const Color.fromARGB(
-                        218, 1, 15, 58), // Set the desired color here
+                    color: const Color.fromARGB(218, 1, 15, 58),
                   ),
                   onPressed: _takePicture,
                 ),

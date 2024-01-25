@@ -32,10 +32,8 @@ class ItemService {
         throw 'Item with the same name already exists';
       }
 
-      // Upload the image to Firebase Storage and get the download URL
       String downloadUrl = await uploadImageToStorage(imageUrl);
 
-      // Store the download URL in the Firestore database
       await items.add({
         'Name': nameId,
         'Amount': amount,
